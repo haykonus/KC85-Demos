@@ -16,18 +16,18 @@ lo      function x, x&255
         endif   
                 org     BASE
         
-	db	1
-	db	7Fh,7Fh
-	db	'GLEEST'
-	db	1
-	
-	call	cls
-	
+        db      1
+        db      7Fh,7Fh
+        db      'GLEEST'
+        db      1
+        
+        call    cls
+        
 ;------------------------------------------------------------------------------
         
         ; Start GleEst
-start:	
-	DI
+start:  
+        DI
         ;ld      sp, stack
         ld      hl, buffer1
         
@@ -117,7 +117,7 @@ start:
                         plot:
                                 ld      a,e
                                 rra
-                                cp      0ffh		; Y max  
+                                cp      0ffh            ; Y max  
                                 
                                 ld      b,a
                                 
@@ -129,7 +129,7 @@ start:
                                 ; in:  BC = Y,X 
                                 ; out: HL = VRAM, A = Bitpos (3-Bit binär)
                                 
-				call	XPY_to_VRAM		
+                                call    XPY_to_VRAM             
 
                                 ld      b,hi(sprite-1)          
                                 cpl
@@ -143,7 +143,7 @@ start:
                                 
                                 exx
                                 
-                                pop     de   		           
+                                pop     de                         
                    
                                 ld      (hl),a          ; BWS-Byte merken
                                 dec     hl
@@ -208,37 +208,37 @@ start:
 
         org     BASE+0F8h
 
-	db 	00000001b
-	db	00000010b
-	db	00000100b
-	db	00001000b
-	db 	00010000b
-	db	00100000b
-	db	01000000b
-	db 	10000000b
+        db      00000001b
+        db      00000010b
+        db      00000100b
+        db      00001000b
+        db      00010000b
+        db      00100000b
+        db      01000000b
+        db      10000000b
 sprite:
 
-   	
+        
 ;------------------------------------------------------------------------------
 ; KC85/4 Grafik-Routinen
 ;------------------------------------------------------------------------------
 
-VRAM_START	equ	08000h
-VRAM_END	equ	0A7FFh
+VRAM_START      equ     08000h
+VRAM_END        equ     0A7FFh
 
 ;------------------------------------------------------------------------------
 ; Löscht Pixel-RAM0
 ;------------------------------------------------------------------------------
 
 cls:
-	ld	hl, VRAM_START
-	xor	a
-	ld	(hl), a
-	ld	de, VRAM_START+1
-	ld	bc, VRAM_END-VRAM_START
-	ldir
-	ret
-	
+        ld      hl, VRAM_START
+        xor     a
+        ld      (hl), a
+        ld      de, VRAM_START+1
+        ld      bc, VRAM_END-VRAM_START
+        ldir
+        ret
+        
 ;------------------------------------------------------------------------------
 ; in:  BC = Y,X (Pixelzeile, Pixelspalte)
 ; out: HL = VRAM, A = Bitpos (3 Bit binär)
@@ -246,33 +246,33 @@ cls:
 
 XPY_to_VRAM:
 
-	ld	a, c
-	and	a, 00000111b	; Bitpos (0-7)
-	push	af		; Bitpos merken
-	
-	; Pixelspalte / 8 = Zeichenspalte
-	
-	srl	c
-	srl	c
-	srl	c
-	
-	; aus KC85/4 System-Handbuch S.112
-	
-	; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
-	; 0 =< Zeichenspalte =< 27H
-	; 0 =< Pixelzeile =< 0FFH
-	
-	ld	a, b		; a=Pixelzeile merken
-	ld	b, c		; b=Zeichenspalte * 100H
-	ld	c, 0
-	ld	hl, VRAM_START
-	add	hl, bc		; 8000H + Zeichenspalte * 100H
-	ld	b, 0
-	ld	c, a
-	add	hl, bc		; (8000H + Zeichenspalte * 100H) + Pixelzeile
-	pop	af	
-	ret
-	
+        ld      a, c
+        and     a, 00000111b    ; Bitpos (0-7)
+        push    af              ; Bitpos merken
+        
+        ; Pixelspalte / 8 = Zeichenspalte
+        
+        srl     c
+        srl     c
+        srl     c
+        
+        ; aus KC85/4 System-Handbuch S.112
+        
+        ; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
+        ; 0 =< Zeichenspalte =< 27H
+        ; 0 =< Pixelzeile =< 0FFH
+        
+        ld      a, b            ; a=Pixelzeile merken
+        ld      b, c            ; b=Zeichenspalte * 100H
+        ld      c, 0
+        ld      hl, VRAM_START
+        add     hl, bc          ; 8000H + Zeichenspalte * 100H
+        ld      b, 0
+        ld      c, a
+        add     hl, bc          ; (8000H + Zeichenspalte * 100H) + Pixelzeile
+        pop     af      
+        ret
+        
 end
 
 ;------------------------------------------------------------------------------
