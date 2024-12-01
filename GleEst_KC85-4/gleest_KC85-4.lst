@@ -1,0 +1,366 @@
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 1 - 12/1/2024 12:57:54
+
+
+       1/       0 :                     ;------------------------------------------------------------------------------
+       2/       0 :                     ; Titel:                GleEst für KC85/4
+       3/       0 :                     ;
+       4/       0 :                     ; Erstellt:             20.11.2024
+       5/       0 :                     ; Letzte Änderung:      29.11.2024
+       6/       0 :                     ;------------------------------------------------------------------------------ 
+       7/       0 :                     
+       8/       0 :                             cpu     z80
+       9/       0 :                     
+      10/       0 :                     hi      function x,(x>>8)&255
+      11/       0 :                     lo      function x, x&255
+      12/       0 :                     
+      13/       0 :                     
+      14/       0 : =>DEFINED                    ifndef  BASE
+      15/       0 :                                     BASE:   set     0200H   
+      16/       0 : [14]                         endif   
+      17/     200 :                                     org     BASE
+      18/     200 :                             
+      19/     200 : 01                  	db	1
+      20/     201 : 7F 7F               	db	7Fh,7Fh
+      21/     203 : 47 4C 45 45 53 54   	db	'GLEEST'
+      22/     209 : 01                  	db	1
+      23/     20A :                     	
+      24/     20A : CD 00 03            	call	cls
+      25/     20D :                     	
+      26/     20D :                     ;------------------------------------------------------------------------------
+      27/     20D :                             
+      28/     20D :                             ; Start GleEst
+      29/     20D :                     start:	
+      30/     20D : F3                  	DI
+      31/     20E :                             ;ld      sp, stack
+      32/     20E : 21 00 04                    ld      hl, buffer1
+      33/     211 :                             
+      34/     211 : D9                          exx
+      35/     212 :                     
+      36/     212 :                             loop_ix:
+      37/     212 :                     
+      38/     212 : 21 00 05                            ld      hl,buffer2
+      39/     215 :                                     loop:   
+      40/     215 :                                             ;ld     bc,10FFh        ; nur wenige Punkte (für Test)
+      41/     215 : 01 06 3F                                    ld      bc,3F06h        ; BH = Abstand Punkte, BL = Anzahl Punkte 
+      42/     218 :                                             
+      43/     218 :                                             d_loop:
+      44/     218 :                                                     ;
+      45/     218 :                                                     ; Pixel löschen
+      46/     218 :                                                     ;
+      47/     218 :                                                     
+      48/     218 : 5E                                                  ld      e,(hl)          ;BWS lo holen
+      49/     219 : 23                                                  inc     hl
+      50/     21A :                                                     
+      51/     21A : 56                                                  ld      d,(hl)          ;BWS hi holen
+      52/     21B : 23                                                  inc     hl
+      53/     21C :                                                                                                        
+      54/     21C : 1A                                                  ld      a,(de)          ;BWS-Byte holen (t)     
+      55/     21D : A6                                                  and     (hl)            ;mit BWS-Byte (t-1) kombinieren (Bits löschen)                                               
+      56/     21E : 12                                                  ld      (de),a          ;BWS schreiben 
+      57/     21F :                                                     
+      58/     21F : D9                                                  exx                     
+      59/     220 :                                                     
+      60/     220 : 7D                                                  proc:   ld      a,L
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 2 - 12/1/2024 12:57:54
+
+
+      61/     221 :                                                     
+      62/     221 : 5E                                                          ld      e,(hl)   
+      63/     222 : 2C                                                          inc     l
+      64/     223 :                                                             
+      65/     223 : 56                                                          ld      d,(hl) 
+      66/     224 : 2C                                                          inc     l
+      67/     225 :                                                             
+      68/     225 : 2C                                                          inc     l
+      69/     226 : 2C                                                          inc     l
+      70/     227 :                                                             
+      71/     227 : 4E                                                          ld      c,(hl)  
+      72/     228 : 2C                                                          inc     l
+      73/     229 :                                                             
+      74/     229 : 46                                                          ld      b,(hl)
+      75/     22A : EB                                                          ex      de,hl
+      76/     22B : 09                                                          add     hl,bc
+      77/     22C : EB                                                          ex      de,hl
+      78/     22D : CB 3A                                                       srl     d
+      79/     22F : CB 1B                                                       rr      e
+      80/     231 : 6F                                                          ld      L,a
+      81/     232 :                                                             
+      82/     232 : 73                                                          ld      (hl),e
+      83/     233 : 2C                                                          inc     l
+      84/     234 :                                                             
+      85/     234 : 72                                                          ld      (hl),d
+      86/     235 : 2C                                                          inc     l
+      87/     236 :                                                             
+      88/     236 : D5                                                          push    de
+      89/     237 : E6 02                                                       and     2       
+      90/     239 :                                                             
+      91/     239 : 28 E5                                               jr      z, proc
+      92/     23B :                     
+      93/     23B : C1                                                  pop     bc
+      94/     23C : E3                                                  ex      (sp),hl
+      95/     23D :                                                     
+      96/     23D : D9                                                  exx
+      97/     23E :                                                     
+      98/     23E : 78                                                  ld      a,b
+      99/     23F :                                                     
+     100/     23F : D9                                                  exx
+     101/     240 :                                                     
+     102/     240 : FE 10                                               cp      10h
+     103/     242 : 38 2D                                               jr      c,dontplot
+     104/     244 :                                                     
+     105/     244 : 01 40 FD                                            ld      bc,0fd40h
+     106/     247 : 09                                                  add     hl,bc
+     107/     248 : CB 3C                                               srl     h
+     108/     24A : 20 25                                               jr      nz,dontplot
+     109/     24C :                                                     
+     110/     24C : CB 1D                                               rr      l
+     111/     24E : 4D                                                  ld      c,L
+     112/     24F : 7A                                                  ld      a,d
+     113/     250 : 80                                                  add     a,b
+     114/     251 : CB 3F                                               srl     a
+     115/     253 : 20 1C                                               jr      nz,dontplot
+     116/     255 :                                                     
+     117/     255 :                                             plot:
+     118/     255 : 7B                                                  ld      a,e
+     119/     256 : 1F                                                  rra
+     120/     257 : FE FF                                               cp      0ffh		; Y max  
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 3 - 12/1/2024 12:57:54
+
+
+     121/     259 :                                                     
+     122/     259 : 47                                                  ld      b,a
+     123/     25A :                                                     
+     124/     25A :                                                     ;
+     125/     25A :                                                     ; Pixel schreiben
+     126/     25A :                                                     ;
+     127/     25A :                                                     
+     128/     25A :                                                     ; XPY_to_VRAM
+     129/     25A :                                                     ; in:  BC = Y,X 
+     130/     25A :                                                     ; out: HL = VRAM, A = Bitpos (3-Bit binär)
+     131/     25A :                                                     
+     132/     25A : CD 0E 03            				call	XPY_to_VRAM		
+     133/     25D :                     
+     134/     25D : 06 02                                               ld      b,hi(sprite-1)          
+     135/     25F : 2F                                                  cpl
+     136/     260 : 4F                                                  ld      c,a             
+     137/     261 : 0A                                                  ld      a,(bc)          ; BWS-Byte holen
+     138/     262 : B6                                                  or      (hl)            ; Hintergrund und Pixel 
+     139/     263 : 77                                                  ld      (hl),a          ; BWS-Byte neu schreiben
+     140/     264 : 2F                                                  cpl
+     141/     265 :                                                     
+     142/     265 : E5                                                  push    hl
+     143/     266 :                                                     
+     144/     266 : D9                                                  exx
+     145/     267 :                                                     
+     146/     267 : D1                                                  pop     de   		           
+     147/     268 :                                        
+     148/     268 : 77                                                  ld      (hl),a          ; BWS-Byte merken
+     149/     269 : 2B                                                  dec     hl
+     150/     26A :                                                                                             
+     151/     26A : 72                                                  ld      (hl),d          ; BWS hi merken
+     152/     26B : 2B                                                  dec     hl
+     153/     26C :                                                     
+     154/     26C : 73                                                  ld      (hl),e          ; BWS lo merken
+     155/     26D : 23                                                  inc     hl                      
+     156/     26E : 23                                                  inc     hl              
+     157/     26F : 78                                                  ld      a,b
+     158/     270 :                                                     
+     159/     270 : D9                                                  exx
+     160/     271 :                             
+     161/     271 :                                             dontplot:
+     162/     271 : E1                                                  pop     hl              
+     163/     272 :                                                     
+     164/     272 : D9                                                  exx
+     165/     273 :                                                     
+     166/     273 : 23                                                  inc     hl              
+     167/     274 :                     
+     168/     274 : 10 A2                                       djnz    d_loop
+     169/     276 :                     
+     170/     276 : 09                                          add     hl,bc   
+     171/     277 :                                             
+     172/     277 : D9                                          exx                     
+     173/     278 :                                             
+     174/     278 :                                             random:
+     175/     278 : D1                                                  pop     de
+     176/     279 : 06 10                                               ld      b,10h
+     177/     27B :                                                     
+     178/     27B : CB 23                                               backw:  sla     e
+     179/     27D : CB 12                                                       rl      d
+     180/     27F : 7A                                                          ld      a,d
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 4 - 12/1/2024 12:57:54
+
+
+     181/     280 : E6 C0                                                       and     0c0h    
+     182/     282 : EA 86 02                                                    jp      pe,forw
+     183/     285 : 1C                                                          inc     e
+     184/     286 :                                                             
+     185/     286 : 10 F3                                       forw:   djnz    backw
+     186/     288 :                                             
+     187/     288 : 7A                                                  ld      a,d
+     188/     289 : D5                                                  push    de
+     189/     28A : 1F                                                  rra
+     190/     28B : CB 18                                               rr      b
+     191/     28D : E6 07                                               and     07h
+     192/     28F : 70                                                  ld      (hl),b   
+     193/     290 : 2C                                                  inc     l
+     194/     291 : 77                                                  ld      (hl),a  
+     195/     292 : 2C                                                  inc     l
+     196/     293 : 20 E3                                       jr      nz,random
+     197/     295 :                                             
+     198/     295 : D9                                          exx                             
+     199/     296 :                                             
+     200/     296 : 3E 0E                                       ld      a,hi(buffer2_end)
+     201/     298 : BC                                          cp      a,h
+     202/     299 :                                             
+     203/     299 : C2 15 02                            jp      nz,loop
+     204/     29C :                                     
+     205/     29C : C3 12 02                    jp      loop_ix
+     206/     29F :                             
+     207/     29F :                     ;------------------------------------------------------------------------------
+     208/     29F :                     
+     209/     2F8 :                             org     BASE+0F8h
+     210/     2F8 :                     
+     211/     2F8 : 01                  	db 	00000001b
+     212/     2F9 : 02                  	db	00000010b
+     213/     2FA : 04                  	db	00000100b
+     214/     2FB : 08                  	db	00001000b
+     215/     2FC : 10                  	db 	00010000b
+     216/     2FD : 20                  	db	00100000b
+     217/     2FE : 40                  	db	01000000b
+     218/     2FF : 80                  	db 	10000000b
+     219/     300 :                     sprite:
+     220/     300 :                     
+     221/     300 :                        	
+     222/     300 :                     ;------------------------------------------------------------------------------
+     223/     300 :                     ; KC85/4 Grafik-Routinen
+     224/     300 :                     ;------------------------------------------------------------------------------
+     225/     300 :                     
+     226/     300 : =8000H               VRAM_START	equ	08000h
+     227/     300 : =0A7FFH              VRAM_END	equ	0A7FFh
+     228/     300 :                     
+     229/     300 :                     ;------------------------------------------------------------------------------
+     230/     300 :                     ; Löscht Pixel-RAM0
+     231/     300 :                     ;------------------------------------------------------------------------------
+     232/     300 :                     
+     233/     300 :                     cls:
+     234/     300 : 21 00 80            	ld	hl, VRAM_START
+     235/     303 : AF                  	xor	a
+     236/     304 : 77                  	ld	(hl), a
+     237/     305 : 11 01 80            	ld	de, VRAM_START+1
+     238/     308 : 01 FF 27            	ld	bc, VRAM_END-VRAM_START
+     239/     30B : ED B0               	ldir
+     240/     30D : C9                  	ret
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 5 - 12/1/2024 12:57:54
+
+
+     241/     30E :                     	
+     242/     30E :                     ;------------------------------------------------------------------------------
+     243/     30E :                     ; in:  BC = Y,X (Pixelzeile, Pixelspalte)
+     244/     30E :                     ; out: HL = VRAM, A = Bitpos (3 Bit binär)
+     245/     30E :                     ;------------------------------------------------------------------------------
+     246/     30E :                     
+     247/     30E :                     XPY_to_VRAM:
+     248/     30E :                     
+     249/     30E : 79                  	ld	a, c
+     250/     30F : E6 07               	and	a, 00000111b	; Bitpos (0-7)
+     251/     311 : F5                  	push	af		; Bitpos merken
+     252/     312 :                     	
+     253/     312 :                     	; Pixelspalte / 8 = Zeichenspalte
+     254/     312 :                     	
+     255/     312 : CB 39               	srl	c
+     256/     314 : CB 39               	srl	c
+     257/     316 : CB 39               	srl	c
+     258/     318 :                     	
+     259/     318 :                     	; aus KC85/4 System-Handbuch S.112
+     260/     318 :                     	
+     261/     318 :                     	; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
+     262/     318 :                     	; 0 =< Zeichenspalte =< 27H
+     263/     318 :                     	; 0 =< Pixelzeile =< 0FFH
+     264/     318 :                     	
+     265/     318 : 78                  	ld	a, b		; a=Pixelzeile merken
+     266/     319 : 41                  	ld	b, c		; b=Zeichenspalte * 100H
+     267/     31A : 0E 00               	ld	c, 0
+     268/     31C : 21 00 80            	ld	hl, VRAM_START
+     269/     31F : 09                  	add	hl, bc		; 8000H + Zeichenspalte * 100H
+     270/     320 : 06 00               	ld	b, 0
+     271/     322 : 4F                  	ld	c, a
+     272/     323 : 09                  	add	hl, bc		; (8000H + Zeichenspalte * 100H) + Pixelzeile
+     273/     324 : F1                  	pop	af	
+     274/     325 : C9                  	ret
+     275/     326 :                     	
+     276/     326 :                     end
+     277/     326 :                     
+     278/     326 :                     ;------------------------------------------------------------------------------
+     279/     326 :                     
+     280/     326 :                             ; RAM für GleEst
+     281/     326 :                             
+     282/     326 :                             align   100h
+     283/     400 :                             
+     284/     400 :                     buffer1:        
+     285/     400 :                             ds      100h
+     286/     500 :                     buffer2:        
+     287/     500 :                             ds      900h
+     288/     E00 :                     buffer2_end:    
+     289/     E00 :                             ds      20h
+     290/     E20 :                     stack:  
+     291/     E20 :                             
+     292/     E20 :                             
+     293/     E20 :                     
+     294/     E20 :                     
+     295/     E20 :                     
+     296/     E20 :                     
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 6 - 12/1/2024 12:57:54
+
+
+  Symbol Table (* = unused):
+  --------------------------
+
+*ARCHITECTURE :                                        "i386-unknown-win32" - |
+ BACKW :                        27B C |  BASE :                         200 - |
+ BUFFER1 :                      400 C |  BUFFER2 :                      500 C |
+ BUFFER2_END :                 0E00 C | *CASESENSITIVE :                  0 - |
+ CLS :                          300 C | *CONSTPI :        3.141592653589793 - |
+*DATE :                 "12/1/2024" - |  DONTPLOT :                     271 C |
+ D_LOOP :                       218 C | *END :                          326 C |
+*FALSE :                          0 - |  FORW :                         286 C |
+*FULLPMMU :                       1 - | *HAS64 :                          0 - |
+*HASFPU :                         0 - | *HASPMMU :                        0 - |
+*INSUPMODE :                      0 - | *LISTON :                         1 - |
+ LOOP :                         215 C |  LOOP_IX :                      212 C |
+*MACEXP :                         7 - | *MOMCPU :                        80 - |
+*MOMCPUNAME :                 "Z80" - | *NESTMAX :                      100 - |
+*PADDING :                        1 - | *PLOT :                         255 C |
+ PROC :                         220 C |  RANDOM :                       278 C |
+*RELAXED :                        0 - |  SPRITE :                       300 C |
+*STACK :                       0E20 C | *START :                        20D C |
+*TIME :                  "12:57:54" - | *TRUE :                           1 - |
+*VERSION :                     142F - |  VRAM_END :                   0A7FF - |
+ VRAM_START :                  8000 - |  XPY_TO_VRAM :                  30E C |
+
+     41 symbols
+     24 unused symbols
+
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 7 - 12/1/2024 12:57:54
+
+
+  Defined Functions:
+  ------------------
+
+LO                                    | HI                                   
+
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 8 - 12/1/2024 12:57:54
+
+
+  Code Pages:
+  ----------
+
+STANDARD (0 changed characters)
+
+1 code page
+
+0.02 seconds assembly time
+
+    296 lines source file
+      2 passes
+      0 errors
+      0 warnings
