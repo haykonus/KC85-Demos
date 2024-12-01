@@ -11,7 +11,7 @@
 
 Dieses Programm für den [KC85/4](http://www.mpm-kc85.de/html/D001BasisDevise.htm) basiert auf [GleEst](https://zxart.ee/eng/software/demoscene/intro/256b-intro/gleest/) für den ZX-Spectrum, programmiert von Oleg Senin (bfox, St.Petersburg, Russia). Seine 256 Byte-Demo enthält im Original noch eine Sound-Ausgabe über den AY-3-8912 und setzt die Farb-Attribute des ZX-Spectrum. Der Algorithmus wurde extrahiert, leicht modifiziert (RAM-Speicherbedarf optimiert) sowie Sound- und Farb-Effekte wurden entfernt. Zum Assemblieren wurde der [Arnold-Assembler](http://john.ccac.rwth-aachen.de:8000/as/) unter Windows 11 verwendet.
 
-In einer nächsten Version soll der Farb-Effekt noch hinzugefügt werden. 
+In einer nächsten Version soll der Farb-Effekt, angepasst an den KC85/4, wieder hinzugefügt werden. 
 
 
 ## Vorausetzungen
