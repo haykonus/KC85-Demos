@@ -23,7 +23,9 @@ In einer nächsten Version soll der Farb-Effekt noch hinzugefügt werden.
 > [!NOTE]
 > Die Links unten anklicken und danach den Download-Button (Download raw file) im Github klicken, um die Datei zu laden.
 
-- [gleest_KC85-4_0200H.bin](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-4/gleest_KC85-4_0200H.bin) auf Adresse 0200H laden.
+- [gleest_KC85-4_0200H.bin](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-4/gleest_KC85-4_0200H.bin) oder
+- [gleest_KC85-4_0200H.kcc](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-4/gleest_KC85-4_0200H.kcc)
+- auf Adresse 0200H laden
 - mit MENU / GLEEST starten
 
 ## Quellen
