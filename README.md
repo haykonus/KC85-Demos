@@ -30,6 +30,7 @@ In einer nächsten Version soll der Farb-Effekt noch hinzugefügt werden.
 oder
 
 - [gleest_KC85-4_0200H.kcc](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-4/gleest_KC85-4_0200H.kcc) laden
+- mit MENU / GLEEST starten
 
 ## Quellen
 
