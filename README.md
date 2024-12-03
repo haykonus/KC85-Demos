@@ -39,7 +39,7 @@ oder
 
 ## Quellen
 
-Dieses Projekt nutzt Infos und Software aus folgenden Quellen:
+Dieses Projekt nutzt Infos und Software aus den u.g. Quellen. Besonderer Dank an Mario Leubner für das herrvoragende KC85/5 Systemhandbuch.
 
 http://kc85.info/
 
