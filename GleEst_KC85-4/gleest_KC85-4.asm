@@ -222,8 +222,8 @@ start:
                                 
                                 ; F=blinken
                                 ; H=hell, G=grün, R=rot, B=blau
-                                ; P3-P0 = Hintergrundfarbe 
-                                ; I2-I0 = Vordergrundfarbe
+                                ; P2-P0 = Hintergrundfarbe 
+                                ; I3-I0 = Vordergrundfarbe
 
                 
                                 ld      a, 00001010b    ; Anzeige Bild0, Farbebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0
@@ -289,8 +289,8 @@ palette:
 
         ; F=blinken
         ; H=hell, G=grün, R=rot, B=blau
-        ; P3/2-P0 = Hintergrundfarbe 
-        ; I2-I0   = Vordergrundfarbe
+        ; P2-P0   = Hintergrundfarbe 
+        ; I3/2-I0 = Vordergrundfarbe
         
         if 0 = 1
         ;----------------------------------------
