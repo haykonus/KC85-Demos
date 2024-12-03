@@ -19,12 +19,14 @@ VRAM_END        equ     0A7FFh
                 org     BASE
         
         db      1,7Fh,7Fh, 'GLEEST', 1
+	
+start:  
         call    cls
         
 ;------------------------------------------------------------------------------
         
         ; Start GleEst
-start:  
+
         DI
         ;ld      sp, stack
         ld      hl, buffer1
@@ -227,13 +229,13 @@ start:
 
                 
                                 ld      a, 00001010b    ; Anzeige Bild0, Farbebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0
-                                out     (84h), a        ; Farbebene eingschalten  
+                                out     (84h), a        ; Farbebene einschalten  
 
                                 ld      a, (bc)         ; Farb-Attribut aus Palette holen
                                 ld      (HL), a         ; in Farbebene schreiben
 
                                 ld      a, 00001000b    ; Anzeige Bild0, Pixelebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0                 
-                                out     (84h), a                
+                                out     (84h), a        ; Pixelebene einschalten     
                                 
                         dontplot:
                                 pop     hl              
