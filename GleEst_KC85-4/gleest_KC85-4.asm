@@ -145,7 +145,7 @@ start:
                                 ; in:  BC = Y,X 
                                 ; out: HL = VRAM, A = Bitpos (3-Bit binär)
                                 
-                                call    XPY_to_VRAM     
+                                call    c,XPY_to_VRAM     
 
                                 ld      b,hi(sprite-1)          
                                 cpl
