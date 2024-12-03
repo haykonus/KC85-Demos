@@ -45,4 +45,9 @@ http://kc85.info/
 
 http://www.mpm-kc85.de/html/D001BasisDevise.htm
 
+http://www.kc85.info/index.php/download.html?view=download&id=401:kc85-5-systemhandbuch&catid=32
+
 https://zxart.ee/eng/software/demoscene/intro/256b-intro/gleest/
+
+http://www.primrosebank.net/computers/zxspectrum/docs/CompleteSpectrumROMDisassemblyThe.pdf
+
