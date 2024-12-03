@@ -12,7 +12,7 @@ if "%2" NEQ "" (
 
 echo -------- %file% -----------
 
-set bin=C:\Users\Heiko\Nextcloud\Privat\as\bin
+set bin=C:\Users\Heiko.pepp\Nextcloud\Privat\as\bin
 %bin%\asw.exe -L %file%.asm -a "%option%"
 %bin%\p2bin.exe -r $-$ "%file%.p" "%binfile%"
 %bin%\plist.exe "%file%.p" 
