@@ -218,7 +218,7 @@ start:
                                 
                                 ; 7  6  5  4  3    2  1  0      Bit
                                 ;    H  G  R  B    G  R  B      Farbe 
-                                ; F  I3 I2 I3 P0   P2 P1 P0     Funktion        
+                                ; F  I3 I2 I1 I0   P2 P1 P0     Funktion        
                                 
                                 ; F=blinken
                                 ; H=hell, G=grün, R=rot, B=blau
@@ -324,7 +324,7 @@ palette:
         ;----------------------------------------
         ; 7  6  5  4  3    2  1  0      Bit
         ;    H  G  R  B    G  R  B      Farbe 
-        ; F  I3 I2 I3 P0   P2 P1 P0     Funktion        
+        ; F  I3 I2 I1 I0   P2 P1 P0     Funktion        
 
         db      00101000b       ; GB
         db      00100000b       ; G  
