@@ -10,22 +10,22 @@
 hi      function x,(x>>8)&255
 lo      function x, x&255
 
-VRAM_START	equ	08000h
-VRAM_END	equ	0A7FFh
+VRAM_START      equ     08000h
+VRAM_END        equ     0A7FFh
 
         ifndef  BASE
                 BASE:   set     0200H   
         endif   
                 org     BASE
         
-	db	1,7Fh,7Fh, 'GLEEST', 1
-	call	cls
-	
+        db      1,7Fh,7Fh, 'GLEEST', 1
+        call    cls
+        
 ;------------------------------------------------------------------------------
         
         ; Start GleEst
-start:	
-	DI
+start:  
+        DI
         ;ld      sp, stack
         ld      hl, buffer1
         
@@ -115,35 +115,35 @@ start:
                         plot:
                                 ld      a,e
                                 rra
-                                cp      0ffh		; Y max  
+                                cp      0ffh            ; Y max  
                                 
                                 ld      b,a
 
-				;
-				; Pixel schreiben
-				;
-				
-				;-------------------------------
-				; ZX Spectrum 
-				;-------------------------------                                
-
-				; THE 'PIXEL ADDRESS' SUBROUTINE
-				; This subroutine is called by the POINT subroutine and by the PLOT command routine. 
-				; Is is entered with the co-ordinates of a pixel in the BC register pair and returns 
-				; with HL holding the address of the display file byte which contains that pixel 
-				; and A pointing to the position of the pixel within the byte.
-		
-				;call	c,22b0h		-> Spectrum ROM
+                                ;
+                                ; Pixel schreiben
+                                ;
                                 
-				;-------------------------------
-				; KC85/4
-				;-------------------------------				
-				
+                                ;-------------------------------
+                                ; ZX Spectrum 
+                                ;-------------------------------                                
+
+                                ; THE 'PIXEL ADDRESS' SUBROUTINE
+                                ; This subroutine is called by the POINT subroutine and by the PLOT command routine. 
+                                ; Is is entered with the co-ordinates of a pixel in the BC register pair and returns 
+                                ; with HL holding the address of the display file byte which contains that pixel 
+                                ; and A pointing to the position of the pixel within the byte.
+                
+                                ;call   c,22b0h         -> Spectrum ROM
+                                
+                                ;-------------------------------
+                                ; KC85/4
+                                ;-------------------------------                                
+                                
                                 ; XPY_to_VRAM
                                 ; in:  BC = Y,X 
                                 ; out: HL = VRAM, A = Bitpos (3-Bit binär)
                                 
-				call	XPY_to_VRAM	
+                                call    XPY_to_VRAM     
 
                                 ld      b,hi(sprite-1)          
                                 cpl
@@ -157,7 +157,7 @@ start:
                                 
                                 exx
                                 
-                                pop     de   		           
+                                pop     de                         
                    
                                 ld      (hl),a          ; BWS-Byte merken
                                 dec     hl
@@ -171,70 +171,70 @@ start:
                                 ld      a,b
                                 
                                 exx
-				
-				rrca	
-				rrca	
-				rrca
-				or	11110000b
-				
-				ld	c,a
+                                
+                                rrca    
+                                rrca    
+                                rrca
+                                or      11110000b
+                                
+                                ld      c,a
 
-				;
-				; Farb-Attribut setzen
-				;
-				
-				;-------------------------------
-				; ZX Spectrum 
-				;-------------------------------
-				
-				;ld	a,(bc)			A = Farb-Attribut
-				
-				; Paper-Attribute ZX-Spectrum
-				;
-				; 7  6  5  4  3   2  1  0	Bit
-				;       G  R  B   G  R  B	Color 	G=green, R=red, B=blue	
-				; F  H  P2 P1 P0  I2 I1 I0      Function
+                                ;
+                                ; Farb-Attribut setzen
+                                ;
+                                
+                                ;-------------------------------
+                                ; ZX Spectrum 
+                                ;-------------------------------
+                                
+                                ;ld     a,(bc)                  A = Farb-Attribut
+                                
+                                ; Paper-Attribute ZX-Spectrum
+                                ;
+                                ; 7  6  5  4  3   2  1  0       Bit
+                                ;       G  R  B   G  R  B       Color   G=green, R=red, B=blue  
+                                ; F  H  P2 P1 P0  I2 I1 I0      Function
 
-				; Where:
+                                ; Where:
 
-				; F sets the attribute FLASH mode
-				; H sets the attribute BRIGHTNESS mode
-				; P2 to P0 is the PAPER colour
-				; I2 to I0 is the INK colour
+                                ; F sets the attribute FLASH mode
+                                ; H sets the attribute BRIGHTNESS mode
+                                ; P2 to P0 is the PAPER colour
+                                ; I2 to I0 is the INK colour
 
-				;ld	(23695),a	; ATTR_T = 5C8Fh ; aktuelle Farben temporaer
-				
-				
-				; THE 'SET ATTRIBUTE BYTE' SUBROUTINE
-				; The appropriate attribute byte is identified and fetched. 
-				; The new value is formed by manipulating the old value, ATTR-T, MASK-T and
-				; P-FLAG. Finally this new value is copied to the attribute area.
-				
-				;call	0BDBh	-> Spectrum ROM
-				
-				;-------------------------------
-				; KC85/4
-				;-------------------------------
-				
-				; 7  6  5  4  3    2  1  0	Bit
-				;    H  G  R  B    G  R  B	Farbe 
-				; F  I3 I2 I3 P0   P2 P1 P0	Funktion	
-				
-				; F=blinken
-				; H=hell, G=grün, R=rot, B=blau
-				; P3-P0 = Vordergrundfarbe 
-				; I2-I0 = Hintergrundfarbe
+                                ;ld     (23695),a       ; ATTR_T = 5C8Fh ; aktuelle Farben temporaer
+                                
+                                
+                                ; THE 'SET ATTRIBUTE BYTE' SUBROUTINE
+                                ; The appropriate attribute byte is identified and fetched. 
+                                ; The new value is formed by manipulating the old value, ATTR-T, MASK-T and
+                                ; P-FLAG. Finally this new value is copied to the attribute area.
+                                
+                                ;call   0BDBh   -> Spectrum ROM
+                                
+                                ;-------------------------------
+                                ; KC85/4
+                                ;-------------------------------
+                                
+                                ; 7  6  5  4  3    2  1  0      Bit
+                                ;    H  G  R  B    G  R  B      Farbe 
+                                ; F  I3 I2 I3 P0   P2 P1 P0     Funktion        
+                                
+                                ; F=blinken
+                                ; H=hell, G=grün, R=rot, B=blau
+                                ; P3-P0 = Vordergrundfarbe 
+                                ; I2-I0 = Hintergrundfarbe
 
-		
-				ld	a, 00001010b	; Anzeige Bild0, Farbebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0
-				out	(84h), a	; Farbebene eingschalten  
+                
+                                ld      a, 00001010b    ; Anzeige Bild0, Farbebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0
+                                out     (84h), a        ; Farbebene eingschalten  
 
-				ld	a, (bc)		; Farb-Attribut aus Palette holen
-				ld	(HL), a		; in Farbebene schreiben
+                                ld      a, (bc)         ; Farb-Attribut aus Palette holen
+                                ld      (HL), a         ; in Farbebene schreiben
 
-				ld	a, 00001000b	; Anzeige Bild0, Pixelebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0			
-				out	(84h), a 		
-				
+                                ld      a, 00001000b    ; Anzeige Bild0, Pixelebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0                 
+                                out     (84h), a                
+                                
                         dontplot:
                                 pop     hl              
                                 
@@ -287,64 +287,64 @@ start:
 
 palette:
 
-	; F=blinken
-	; H=hell, G=grün, R=rot, B=blau
-	; P3/2-P0 = Hintergrundfarbe 
-	; I2-I0   = Vordergrundfarbe
-	
-	if 0 = 1
-	;----------------------------------------
-	; ZX Spectrum 
-	;----------------------------------------	
-	; 7  6  5  4  3   2  1  0	Bit
-	;       G  R  B   G  R  B	Farbe 	
-	; F  H  P2 P1 P0  I2 I1 I0      Funktion
-				
-	db 	45h		; HGB
-		;01 000 101
-	
-	db	44h		; HG
-		;01 000 100
-	
-	db	06h		; GR
-		;00 000 110
-	
-	db	42h		; HR
-		;01 000 010
+        ; F=blinken
+        ; H=hell, G=grün, R=rot, B=blau
+        ; P3/2-P0 = Hintergrundfarbe 
+        ; I2-I0   = Vordergrundfarbe
+        
+        if 0 = 1
+        ;----------------------------------------
+        ; ZX Spectrum 
+        ;----------------------------------------       
+        ; 7  6  5  4  3   2  1  0       Bit
+        ;       G  R  B   G  R  B       Farbe   
+        ; F  H  P2 P1 P0  I2 I1 I0      Funktion
+                                
+        db      45h             ; HGB
+                ;01 000 101
+        
+        db      44h             ; HG
+                ;01 000 100
+        
+        db      06h             ; GR
+                ;00 000 110
+        
+        db      42h             ; HR
+                ;01 000 010
 
-	db	03h		; RB
-		;00 000 011
+        db      03h             ; RB
+                ;00 000 011
 
-	db	01h		; B
-		;00 000 001
-	endif
+        db      01h             ; B
+                ;00 000 001
+        endif
 
-	;----------------------------------------
-	; KC85/4
-	;----------------------------------------
-	; 7  6  5  4  3    2  1  0	Bit
-	;    H  G  R  B    G  R  B	Farbe 
-	; F  I3 I2 I3 P0   P2 P1 P0	Funktion	
+        ;----------------------------------------
+        ; KC85/4
+        ;----------------------------------------
+        ; 7  6  5  4  3    2  1  0      Bit
+        ;    H  G  R  B    G  R  B      Farbe 
+        ; F  I3 I2 I3 P0   P2 P1 P0     Funktion        
 
-	db	00101000b	; GB
-	db	00100000b	; G  
-	db	00110000b	; GR 
-	db	00010000b	; R  
-	db	00011000b	; RB 
-	db	00001000b	; B  
+        db      00101000b       ; GB
+        db      00100000b       ; G  
+        db      00110000b       ; GR 
+        db      00010000b       ; R  
+        db      00011000b       ; RB 
+        db      00001000b       ; B  
 
-	db 	00000001b
-	db	00000010b
-	db	00000100b
-	db	00001000b
-	db 	00010000b
-	db	00100000b
-	db	01000000b
-	db 	10000000b
+        db      00000001b
+        db      00000010b
+        db      00000100b
+        db      00001000b
+        db      00010000b
+        db      00100000b
+        db      01000000b
+        db      10000000b
 sprite:
 
     
-	
+        
 ;------------------------------------------------------------------------------
 ; KC85/4 Grafik-Routinen
 ;------------------------------------------------------------------------------
@@ -369,32 +369,32 @@ sprite:
 ;------------------------------------------------------------------------------
 
 cls:
-	ld	hl, VRAM_START
-	xor	a			; alle Pixel aus
-	ld	(hl), a	
-	ld	de, VRAM_START+1
-	ld	bc, VRAM_END-VRAM_START
-	ldir
-	
-	ld	a, (IX+1)		; streng nach Vorschrift ...
-	or	a, 00000010b		; Farbebene ein
-	ld	(IX+1), a		; streng nach Vorschrift ...
-	out	(84h), a
+        ld      hl, VRAM_START
+        xor     a                       ; alle Pixel aus
+        ld      (hl), a 
+        ld      de, VRAM_START+1
+        ld      bc, VRAM_END-VRAM_START
+        ldir
+        
+        ld      a, (IX+1)               ; streng nach Vorschrift ...
+        or      a, 00000010b            ; Farbebene ein
+        ld      (IX+1), a               ; streng nach Vorschrift ...
+        out     (84h), a
 
-	ld	hl, VRAM_START
-	xor	a			; alle Farben aus
-	ld	(hl), a
-	ld	de, VRAM_START+1
-	ld	bc, VRAM_END-VRAM_START
-	ldir
+        ld      hl, VRAM_START
+        xor     a                       ; alle Farben aus
+        ld      (hl), a
+        ld      de, VRAM_START+1
+        ld      bc, VRAM_END-VRAM_START
+        ldir
 
-	ld	a, (IX+1)		; streng nach Vorschrift ...
-	and	a, 11111101b		; Pixelebene ein
-	ld	(IX+1), a		; streng nach Vorschrift ...	
-	out	(84h), a
-	
-	ret
-	
+        ld      a, (IX+1)               ; streng nach Vorschrift ...
+        and     a, 11111101b            ; Pixelebene ein
+        ld      (IX+1), a               ; streng nach Vorschrift ...    
+        out     (84h), a
+        
+        ret
+        
 ;------------------------------------------------------------------------------
 ; in:  BC = Y,X (Pixelzeile, Pixelspalte)
 ; out: HL = VRAM, A = Bitpos (3 Bit binär)
@@ -402,33 +402,33 @@ cls:
 
 XPY_to_VRAM:
 
-	ld	a, c
-	and	a, 00000111b	; Bitpos (0-7)
-	push	af		; Bitpos merken
-	
-	; Pixelspalte / 8 = Zeichenspalte
-	
-	srl	c
-	srl	c
-	srl	c
-	
-	; aus KC85/5 System-Handbuch S.231
-	
-	; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
-	; 0 =< Zeichenspalte =< 27H
-	; 0 =< Pixelzeile =< 0FFH
-	
-	ld	a, b			; a=Pixelzeile merken
-	ld	b, c			; b=Zeichenspalte * 100H
-	ld	c, 0
-	ld	hl, VRAM_START+4*256	; Start + Bild mittig
-	add	hl, bc			; 8000H + Zeichenspalte * 100H
-	ld	b, 0
-	ld	c, a
-	add	hl, bc			; (8000H + Zeichenspalte * 100H) + Pixelzeile
-	pop	af	
-	ret
-	
+        ld      a, c
+        and     a, 00000111b    ; Bitpos (0-7)
+        push    af              ; Bitpos merken
+        
+        ; Pixelspalte / 8 = Zeichenspalte
+        
+        srl     c
+        srl     c
+        srl     c
+        
+        ; aus KC85/5 System-Handbuch S.231
+        
+        ; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
+        ; 0 =< Zeichenspalte =< 27H
+        ; 0 =< Pixelzeile =< 0FFH
+        
+        ld      a, b                    ; a=Pixelzeile merken
+        ld      b, c                    ; b=Zeichenspalte * 100H
+        ld      c, 0
+        ld      hl, VRAM_START+4*256    ; Start + Bild mittig
+        add     hl, bc                  ; 8000H + Zeichenspalte * 100H
+        ld      b, 0
+        ld      c, a
+        add     hl, bc                  ; (8000H + Zeichenspalte * 100H) + Pixelzeile
+        pop     af      
+        ret
+        
 end
 
 ;------------------------------------------------------------------------------
