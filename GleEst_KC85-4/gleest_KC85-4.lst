@@ -1,4 +1,4 @@
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 1 - 12/4/2024 13:2:9
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 1 - 12/4/2024 22:10:39
 
 
        1/       0 :                     ;------------------------------------------------------------------------------
@@ -61,7 +61,7 @@
       57/     21F :                                                     
       58/     21F : D9                                                  exx                     
       59/     220 :                                                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 2 - 12/4/2024 13:2:9
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 2 - 12/4/2024 22:10:39
 
 
       60/     220 : 7D                                                  proc:   ld      a,L
@@ -107,24 +107,24 @@
      100/     23F : D9                                                  exx
      101/     240 :                                                     
      102/     240 : FE 10                                               cp      10h
-     103/     242 : 38 3C                                               jr      c,dontplot
+     103/     242 : 38 42                                               jr      c,dontplot
      104/     244 :                                                     
      105/     244 : 01 40 FD                                            ld      bc,0fd40h
      106/     247 : 09                                                  add     hl,bc
      107/     248 : CB 3C                                               srl     h
-     108/     24A : 20 34                                               jr      nz,dontplot
+     108/     24A : 20 3A                                               jr      nz,dontplot
      109/     24C :                                                     
      110/     24C : CB 1D                                               rr      l
      111/     24E : 4D                                                  ld      c,L
      112/     24F : 7A                                                  ld      a,d
      113/     250 : 80                                                  add     a,b
      114/     251 : CB 3F                                               srl     a
-     115/     253 : 20 2B                                               jr      nz,dontplot
+     115/     253 : 20 31                                               jr      nz,dontplot
      116/     255 :                                                     
      117/     255 :                                             plot:
      118/     255 : 7B                                                  ld      a,e
      119/     256 : 1F                                                  rra
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 3 - 12/4/2024 13:2:9
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 3 - 12/4/2024 22:10:39
 
 
      120/     257 : FE FF                                               cp      0ffh            ; Y max  
@@ -187,7 +187,7 @@
      177/     272 : 0F                                                  rrca
      178/     273 : F6 F0                                               or      11110000b
      179/     275 :                                                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 4 - 12/4/2024 13:2:9
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 4 - 12/4/2024 22:10:39
 
 
      180/     275 : 4F                                                  ld      c,a
@@ -238,290 +238,293 @@
      225/     276 :                                                     ; P2-P0 = Hintergrundfarbe 
      226/     276 :                                                     ; I3-I0 = Vordergrundfarbe
      227/     276 :                     
-     228/     276 :                                     
-     229/     276 : 3E 0A                                               ld      a, 00001010b    ; Anzeige Bild0, Farbebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0
-     230/     278 : D3 84                                               out     (84h), a        ; Farbebene einschalten  
-     231/     27A :                     
-     232/     27A : 0A                                                  ld      a, (bc)         ; Farb-Attribut aus Palette holen
-     233/     27B : 77                                                  ld      (HL), a         ; in Farbebene schreiben
-     234/     27C :                     
-     235/     27C : 3E 08                                               ld      a, 00001000b    ; Anzeige Bild0, Pixelebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0                 
-     236/     27E : D3 84                                               out     (84h), a        ; Pixelebene einschalten     
-     237/     280 :                                                     
-     238/     280 :                                             dontplot:
-     239/     280 : E1                                                  pop     hl              
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 5 - 12/4/2024 13:2:9
+     228/     276 : DD 7E 01            				ld      a, (IX+1)        
+     229/     279 : F6 02               				or      a, 00000010b    ; Farbebene ein
+     230/     27B :                     				;ld      a, 00001010b   ; Anzeige Bild0, Farbebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0   
+     231/     27B : D3 84               				out     (84h), a
+     232/     27D :                     
+     233/     27D : 0A                                                  ld      a, (bc)         ; Farb-Attribut aus Palette holen
+     234/     27E : 77                                                  ld      (HL), a         ; in Farbebene schreiben
+     235/     27F :                     
+     236/     27F : DD 7E 01            				ld      a, (IX+1)               
+     237/     282 : E6 FD               				and     a, 11111101b    ; Pixelebene ein
+     238/     284 :                     				;ld      a, 00001000b   ; Anzeige Bild0, Pixelebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0                  
+     239/     284 : D3 84               				out     (84h), a
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 5 - 12/4/2024 22:10:39
 
 
-     240/     281 :                                                     
-     241/     281 : D9                                                  exx
-     242/     282 :                                                     
-     243/     282 : 23                                                  inc     hl              
-     244/     283 :                     
-     245/     283 : 10 93                                       djnz    d_loop
-     246/     285 :                     
-     247/     285 : 09                                          add     hl,bc   
-     248/     286 :                                             
-     249/     286 : D9                                          exx                     
-     250/     287 :                                             
-     251/     287 :                                             random:
-     252/     287 : D1                                                  pop     de
-     253/     288 : 06 10                                               ld      b,10h
-     254/     28A :                                                     
-     255/     28A : CB 23                                               backw:  sla     e
-     256/     28C : CB 12                                                       rl      d
-     257/     28E : 7A                                                          ld      a,d
-     258/     28F : E6 C0                                                       and     0c0h    
-     259/     291 : EA 95 02                                                    jp      pe,forw
-     260/     294 : 1C                                                          inc     e
-     261/     295 :                                                             
-     262/     295 : 10 F3                                       forw:   djnz    backw
-     263/     297 :                                             
-     264/     297 : 7A                                                  ld      a,d
-     265/     298 : D5                                                  push    de
-     266/     299 : 1F                                                  rra
-     267/     29A : CB 18                                               rr      b
-     268/     29C : E6 07                                               and     07h
-     269/     29E : 70                                                  ld      (hl),b   
-     270/     29F : 2C                                                  inc     l
-     271/     2A0 : 77                                                  ld      (hl),a  
-     272/     2A1 : 2C                                                  inc     l
-     273/     2A2 : 20 E3                                       jr      nz,random
-     274/     2A4 :                                             
-     275/     2A4 : D9                                          exx                             
-     276/     2A5 :                                             
-     277/     2A5 : 3E 0E                                       ld      a,hi(buffer2_end)
-     278/     2A7 : BC                                          cp      a,h
-     279/     2A8 :                                             
-     280/     2A8 : C2 15 02                            jp      nz,loop
-     281/     2AB :                                     
-     282/     2AB : C3 12 02                    jp      loop_ix
-     283/     2AE :                             
-     284/     2AE :                     ;------------------------------------------------------------------------------
-     285/     2AE :                     
-     286/     2F2 :                             org     BASE+0F8h-6
-     287/     2F2 :                     
-     288/     2F2 :                     palette:
-     289/     2F2 :                     
-     290/     2F2 :                             ; F=blinken
-     291/     2F2 :                             ; H=hell, G=grün, R=rot, B=blau
-     292/     2F2 :                             ; P2-P0   = Hintergrundfarbe 
-     293/     2F2 :                             ; I3/2-I0 = Vordergrundfarbe
-     294/     2F2 :                             
-     295/     2F2 : =>FALSE                      if 0 = 1
-     296/     2F2 :                             ;----------------------------------------
-     297/     2F2 :                             ; ZX Spectrum 
-     298/     2F2 :                             ;----------------------------------------       
-     299/     2F2 :                             ; 7  6  5  4  3   2  1  0       Bit
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 6 - 12/4/2024 13:2:9
+     240/     286 :                                                                                               
+     241/     286 :                                             dontplot:
+     242/     286 : E1                                                  pop     hl              
+     243/     287 :                                                     
+     244/     287 : D9                                                  exx
+     245/     288 :                                                     
+     246/     288 : 23                                                  inc     hl              
+     247/     289 :                     
+     248/     289 : 10 8D                                       djnz    d_loop
+     249/     28B :                     
+     250/     28B : 09                                          add     hl,bc   
+     251/     28C :                                             
+     252/     28C : D9                                          exx                     
+     253/     28D :                                             
+     254/     28D :                                             random:
+     255/     28D : D1                                                  pop     de
+     256/     28E : 06 10                                               ld      b,10h
+     257/     290 :                                                     
+     258/     290 : CB 23                                               backw:  sla     e
+     259/     292 : CB 12                                                       rl      d
+     260/     294 : 7A                                                          ld      a,d
+     261/     295 : E6 C0                                                       and     0c0h    
+     262/     297 : EA 9B 02                                                    jp      pe,forw
+     263/     29A : 1C                                                          inc     e
+     264/     29B :                                                             
+     265/     29B : 10 F3                                       forw:   djnz    backw
+     266/     29D :                                             
+     267/     29D : 7A                                                  ld      a,d
+     268/     29E : D5                                                  push    de
+     269/     29F : 1F                                                  rra
+     270/     2A0 : CB 18                                               rr      b
+     271/     2A2 : E6 07                                               and     07h
+     272/     2A4 : 70                                                  ld      (hl),b   
+     273/     2A5 : 2C                                                  inc     l
+     274/     2A6 : 77                                                  ld      (hl),a  
+     275/     2A7 : 2C                                                  inc     l
+     276/     2A8 : 20 E3                                       jr      nz,random
+     277/     2AA :                                             
+     278/     2AA : D9                                          exx                             
+     279/     2AB :                                             
+     280/     2AB : 3E 0E                                       ld      a,hi(buffer2_end)
+     281/     2AD : BC                                          cp      a,h
+     282/     2AE :                                             
+     283/     2AE : C2 15 02                            jp      nz,loop
+     284/     2B1 :                                     
+     285/     2B1 : C3 12 02                    jp      loop_ix
+     286/     2B4 :                             
+     287/     2B4 :                     ;------------------------------------------------------------------------------
+     288/     2B4 :                     
+     289/     2F2 :                             org     BASE+0F8h-6
+     290/     2F2 :                     
+     291/     2F2 :                     palette:
+     292/     2F2 :                     
+     293/     2F2 :                             ; F=blinken
+     294/     2F2 :                             ; H=hell, G=grün, R=rot, B=blau
+     295/     2F2 :                             ; P2-P0   = Hintergrundfarbe 
+     296/     2F2 :                             ; I3/2-I0 = Vordergrundfarbe
+     297/     2F2 :                             
+     298/     2F2 : =>FALSE                      if 0 = 1
+     299/     2F2 :                             ;----------------------------------------
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 6 - 12/4/2024 22:10:39
 
 
-     300/     2F2 :                             ;       G  R  B   G  R  B       Farbe   
-     301/     2F2 :                             ; F  H  P2 P1 P0  I2 I1 I0      Funktion
-     302/     2F2 :                                                     
-     303/     2F2 :                             db      45h             ; HGB
-     304/     2F2 :                                     ;01 000 101
-     305/     2F2 :                             
-     306/     2F2 :                             db      44h             ; HG
-     307/     2F2 :                                     ;01 000 100
+     300/     2F2 :                             ; ZX Spectrum 
+     301/     2F2 :                             ;----------------------------------------       
+     302/     2F2 :                             ; 7  6  5  4  3   2  1  0       Bit
+     303/     2F2 :                             ;       G  R  B   G  R  B       Farbe   
+     304/     2F2 :                             ; F  H  P2 P1 P0  I2 I1 I0      Funktion
+     305/     2F2 :                                                     
+     306/     2F2 :                             db      45h             ; HGB
+     307/     2F2 :                                     ;01 000 101
      308/     2F2 :                             
-     309/     2F2 :                             db      06h             ; GR
-     310/     2F2 :                                     ;00 000 110
+     309/     2F2 :                             db      44h             ; HG
+     310/     2F2 :                                     ;01 000 100
      311/     2F2 :                             
-     312/     2F2 :                             db      42h             ; HR
-     313/     2F2 :                                     ;01 000 010
-     314/     2F2 :                     
-     315/     2F2 :                             db      03h             ; RB
-     316/     2F2 :                                     ;00 000 011
+     312/     2F2 :                             db      06h             ; GR
+     313/     2F2 :                                     ;00 000 110
+     314/     2F2 :                             
+     315/     2F2 :                             db      42h             ; HR
+     316/     2F2 :                                     ;01 000 010
      317/     2F2 :                     
-     318/     2F2 :                             db      01h             ; B
-     319/     2F2 :                                     ;00 000 001
-     320/     2F2 : [295]                        endif
-     321/     2F2 :                     
-     322/     2F2 :                             ;----------------------------------------
-     323/     2F2 :                             ; KC85/4
-     324/     2F2 :                             ;----------------------------------------
-     325/     2F2 :                             ; 7  6  5  4  3    2  1  0      Bit
-     326/     2F2 :                             ;    H  G  R  B    G  R  B      Farbe 
-     327/     2F2 :                             ; F  I3 I2 I1 I0   P2 P1 P0     Funktion        
-     328/     2F2 :                     
-     329/     2F2 : 28                          db      00101000b       ; GB
-     330/     2F3 : 20                          db      00100000b       ; G  
-     331/     2F4 : 30                          db      00110000b       ; GR 
-     332/     2F5 : 10                          db      00010000b       ; R  
-     333/     2F6 : 18                          db      00011000b       ; RB 
-     334/     2F7 : 08                          db      00001000b       ; B  
-     335/     2F8 :                     
-     336/     2F8 : 01                          db      00000001b
-     337/     2F9 : 02                          db      00000010b
-     338/     2FA : 04                          db      00000100b
-     339/     2FB : 08                          db      00001000b
-     340/     2FC : 10                          db      00010000b
-     341/     2FD : 20                          db      00100000b
-     342/     2FE : 40                          db      01000000b
-     343/     2FF : 80                          db      10000000b
-     344/     300 :                     sprite:
-     345/     300 :                     
-     346/     300 :                         
-     347/     300 :                             
-     348/     300 :                     ;------------------------------------------------------------------------------
-     349/     300 :                     ; KC85/4 Grafik-Routinen
-     350/     300 :                     ;------------------------------------------------------------------------------
-     351/     300 :                     
-     352/     300 :                     ; KC85/5 Systemhandbuch S.127
-     353/     300 :                     
-     354/     300 :                     ; Ausgabe Port 84H bzw. (IX + 1)
-     355/     300 :                     ; Bit 0 - Anzeige Bild 0 oder 1
-     356/     300 :                     ; Bit 1 - Zugriff auf Pixel- oder Farbebene(Pixel = 0 oder Farbe = 1)
-     357/     300 :                     ; Bit 2 - Zugriff auf Bild 0 oder 1
-     358/     300 :                     ; Bit 3 - hohe Farbauflösung ein/aus(0 = hohe oder 1 = niedrige)
-     359/     300 :                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 7 - 12/4/2024 13:2:9
+     318/     2F2 :                             db      03h             ; RB
+     319/     2F2 :                                     ;00 000 011
+     320/     2F2 :                     
+     321/     2F2 :                             db      01h             ; B
+     322/     2F2 :                                     ;00 000 001
+     323/     2F2 : [298]                        endif
+     324/     2F2 :                     
+     325/     2F2 :                             ;----------------------------------------
+     326/     2F2 :                             ; KC85/4
+     327/     2F2 :                             ;----------------------------------------
+     328/     2F2 :                             ; 7  6  5  4  3    2  1  0      Bit
+     329/     2F2 :                             ;    H  G  R  B    G  R  B      Farbe 
+     330/     2F2 :                             ; F  I3 I2 I1 I0   P2 P1 P0     Funktion        
+     331/     2F2 :                     
+     332/     2F2 : 28                          db      00101000b       ; GB
+     333/     2F3 : 20                          db      00100000b       ; G  
+     334/     2F4 : 30                          db      00110000b       ; GR 
+     335/     2F5 : 10                          db      00010000b       ; R  
+     336/     2F6 : 18                          db      00011000b       ; RB 
+     337/     2F7 : 08                          db      00001000b       ; B  
+     338/     2F8 :                     
+     339/     2F8 : 01                          db      00000001b
+     340/     2F9 : 02                          db      00000010b
+     341/     2FA : 04                          db      00000100b
+     342/     2FB : 08                          db      00001000b
+     343/     2FC : 10                          db      00010000b
+     344/     2FD : 20                          db      00100000b
+     345/     2FE : 40                          db      01000000b
+     346/     2FF : 80                          db      10000000b
+     347/     300 :                     sprite:
+     348/     300 :                     
+     349/     300 :                         
+     350/     300 :                             
+     351/     300 :                     ;------------------------------------------------------------------------------
+     352/     300 :                     ; KC85/4 Grafik-Routinen
+     353/     300 :                     ;------------------------------------------------------------------------------
+     354/     300 :                     
+     355/     300 :                     ; KC85/5 Systemhandbuch S.127
+     356/     300 :                     
+     357/     300 :                     ; Ausgabe Port 84H bzw. (IX + 1)
+     358/     300 :                     ; Bit 0 - Anzeige Bild 0 oder 1
+     359/     300 :                     ; Bit 1 - Zugriff auf Pixel- oder Farbebene(Pixel = 0 oder Farbe = 1)
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 7 - 12/4/2024 22:10:39
 
 
-     360/     300 :                     ; Bit 4 -+
-     361/     300 :                     ; Bit 5  +- Auswahl der RAM8-Ebene (4 Bit = 16 Ebenen)
-     362/     300 :                     ; Bit 6  |
-     363/     300 :                     ; Bit 7 -+
-     364/     300 :                     ;
-     365/     300 :                     ; Farben s. KC85/5 Systemhandbuch S.232-233
-     366/     300 :                     
-     367/     300 :                     ;------------------------------------------------------------------------------
-     368/     300 :                     ; Löscht Pixel/Farb-RAM0
-     369/     300 :                     ;------------------------------------------------------------------------------
-     370/     300 :                     
-     371/     300 :                     cls:
-     372/     300 : 21 00 80                    ld      hl, VRAM_START
-     373/     303 : AF                          xor     a                       ; alle Pixel aus
-     374/     304 : 77                          ld      (hl), a 
-     375/     305 : 11 01 80                    ld      de, VRAM_START+1
-     376/     308 : 01 FF 27                    ld      bc, VRAM_END-VRAM_START
-     377/     30B : ED B0                       ldir
-     378/     30D :                             
-     379/     30D : DD 7E 01                    ld      a, (IX+1)               ; streng nach Vorschrift ...
-     380/     310 : F6 02                       or      a, 00000010b            ; Farbebene ein
-     381/     312 : DD 77 01                    ld      (IX+1), a               ; streng nach Vorschrift ...
-     382/     315 : D3 84                       out     (84h), a
-     383/     317 :                     
-     384/     317 : 21 00 80                    ld      hl, VRAM_START
-     385/     31A : AF                          xor     a                       ; alle Farben aus
-     386/     31B : 77                          ld      (hl), a
-     387/     31C : 11 01 80                    ld      de, VRAM_START+1
-     388/     31F : 01 FF 27                    ld      bc, VRAM_END-VRAM_START
-     389/     322 : ED B0                       ldir
-     390/     324 :                     
-     391/     324 : DD 7E 01                    ld      a, (IX+1)               ; streng nach Vorschrift ...
-     392/     327 : E6 FD                       and     a, 11111101b            ; Pixelebene ein
-     393/     329 : DD 77 01                    ld      (IX+1), a               ; streng nach Vorschrift ...    
-     394/     32C : D3 84                       out     (84h), a
-     395/     32E :                             
-     396/     32E : C9                          ret
-     397/     32F :                             
-     398/     32F :                     ;------------------------------------------------------------------------------
-     399/     32F :                     ; in:  AC = Y,X (Pixelzeile, Pixelspalte)
-     400/     32F :                     ; out: HL = VRAM, A = Bitpos (3 Bit binär)
+     360/     300 :                     ; Bit 2 - Zugriff auf Bild 0 oder 1
+     361/     300 :                     ; Bit 3 - hohe Farbauflösung ein/aus(0 = hohe oder 1 = niedrige)
+     362/     300 :                     
+     363/     300 :                     ; Bit 4 -+
+     364/     300 :                     ; Bit 5  +- Auswahl der RAM8-Ebene (4 Bit = 16 Ebenen)
+     365/     300 :                     ; Bit 6  |
+     366/     300 :                     ; Bit 7 -+
+     367/     300 :                     ;
+     368/     300 :                     ; Farben s. KC85/5 Systemhandbuch S.232-233
+     369/     300 :                     
+     370/     300 :                     ;------------------------------------------------------------------------------
+     371/     300 :                     ; Löscht Pixel/Farb-RAM0
+     372/     300 :                     ;------------------------------------------------------------------------------
+     373/     300 :                     
+     374/     300 :                     cls:
+     375/     300 : 21 00 80                    ld      hl, VRAM_START
+     376/     303 : AF                          xor     a                       ; alle Pixel aus
+     377/     304 : 77                          ld      (hl), a 
+     378/     305 : 11 01 80                    ld      de, VRAM_START+1
+     379/     308 : 01 FF 27                    ld      bc, VRAM_END-VRAM_START
+     380/     30B : ED B0                       ldir
+     381/     30D :                             
+     382/     30D : DD 7E 01                    ld      a, (IX+1)               ; streng nach Vorschrift ...
+     383/     310 : F6 02                       or      a, 00000010b            ; Farbebene ein
+     384/     312 : DD 77 01                    ld      (IX+1), a               ; streng nach Vorschrift ...
+     385/     315 : D3 84                       out     (84h), a
+     386/     317 :                     
+     387/     317 : 21 00 80                    ld      hl, VRAM_START
+     388/     31A : AF                          xor     a                       ; alle Farben aus
+     389/     31B : 77                          ld      (hl), a
+     390/     31C : 11 01 80                    ld      de, VRAM_START+1
+     391/     31F : 01 FF 27                    ld      bc, VRAM_END-VRAM_START
+     392/     322 : ED B0                       ldir
+     393/     324 :                     
+     394/     324 : DD 7E 01                    ld      a, (IX+1)               ; streng nach Vorschrift ...
+     395/     327 : E6 FD                       and     a, 11111101b            ; Pixelebene ein
+     396/     329 : DD 77 01                    ld      (IX+1), a               ; streng nach Vorschrift ...    
+     397/     32C : D3 84                       out     (84h), a
+     398/     32E :                             
+     399/     32E : C9                          ret
+     400/     32F :                             
      401/     32F :                     ;------------------------------------------------------------------------------
-     402/     32F :                     
-     403/     32F :                     XPY_to_VRAM_old:
-     404/     32F :                     
-     405/     32F : 47                          ld      b, a            
-     406/     330 : 79                          ld      a, c
-     407/     331 : E6 07                       and     a, 00000111b    ; Bitpos (0-7)
-     408/     333 : F5                          push    af              ; Bitpos merken
-     409/     334 :                             
-     410/     334 :                             ; Pixelspalte / 8 = Zeichenspalte
-     411/     334 :                             
-     412/     334 : CB 39                       srl     c
-     413/     336 : CB 39                       srl     c
-     414/     338 : CB 39                       srl     c
-     415/     33A :                             
-     416/     33A :                             ; aus KC85/5 System-Handbuch S.231
-     417/     33A :                             
-     418/     33A :                             ; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
-     419/     33A :                             ; 0 =< Zeichenspalte =< 27H
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 8 - 12/4/2024 13:2:9
+     402/     32F :                     ; in:  AC = Y,X (Pixelzeile, Pixelspalte)
+     403/     32F :                     ; out: HL = VRAM, A = Bitpos (3 Bit binär)
+     404/     32F :                     ;------------------------------------------------------------------------------
+     405/     32F :                     
+     406/     32F :                     XPY_to_VRAM_old:
+     407/     32F :                     
+     408/     32F : 47                          ld      b, a            
+     409/     330 : 79                          ld      a, c
+     410/     331 : E6 07                       and     a, 00000111b    ; Bitpos (0-7)
+     411/     333 : F5                          push    af              ; Bitpos merken
+     412/     334 :                             
+     413/     334 :                             ; Pixelspalte / 8 = Zeichenspalte
+     414/     334 :                             
+     415/     334 : CB 39                       srl     c
+     416/     336 : CB 39                       srl     c
+     417/     338 : CB 39                       srl     c
+     418/     33A :                             
+     419/     33A :                             ; aus KC85/5 System-Handbuch S.231
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 8 - 12/4/2024 22:10:39
 
 
-     420/     33A :                             ; 0 =< Pixelzeile =< 0FFH
-     421/     33A :                             
-     422/     33A : 78                          ld      a, b                    ; a=Pixelzeile merken
-     423/     33B : 41                          ld      b, c                    ; b=Zeichenspalte * 100H
-     424/     33C : 0E 00                       ld      c, 0
-     425/     33E : 21 00 84                    ld      hl, VRAM_START+4*256    ; Start + Bild mittig
-     426/     341 : 09                          add     hl, bc                  ; 8000H + Zeichenspalte * 100H
-     427/     342 : 06 00                       ld      b, 0
-     428/     344 : 4F                          ld      c, a
-     429/     345 : 09                          add     hl, bc                  ; (8000H + Zeichenspalte * 100H) + Pixelzeile
-     430/     346 : F1                          pop     af      
-     431/     347 : C9                          ret
-     432/     348 :                     
-     433/     348 :                     ;------------------------------------------------------------------------------
-     434/     348 :                     ; in:  AC = Y,X (Pixelzeile, Pixelspalte)
-     435/     348 :                     ; out: HL = VRAM, A = Bitpos (3 Bit binär)
-     436/     348 :                     ;
-     437/     348 :                     ; TIPP von KaiOr
-     438/     348 :                     ;------------------------------------------------------------------------------
-     439/     348 :                     
-     440/     348 :                     XPY_to_VRAM:
-     441/     348 :                             
-     442/     348 : 6F                          ld      l, a
-     443/     349 :                             
-     444/     349 :                             ; Pixelspalte / 8 = Zeichenspalte
-     445/     349 :                             
-     446/     349 : 79                          ld      a, c
-     447/     34A : 1F                          rra
-     448/     34B : 1F                          rra
-     449/     34C : 1F                          rra
-     450/     34D : E6 1F                       and     1Fh             ;Bit 7-5 loeschen
-     451/     34F :                             
-     452/     34F :                             ; aus KC85/4 System-Handbuch S.112
-     453/     34F :                             
-     454/     34F :                             ; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
-     455/     34F :                             ; 0 =< Zeichenspalte =< 27H
-     456/     34F :                             ; 0 =< Pixelzeile =< 0FFH
-     457/     34F :                             
-     458/     34F : F6 80                       or      80h             ;Adressbereich auf obere 8000H heben
-     459/     351 : C6 04                       add     a, 4            ;Bild mittig
-     460/     353 : 67                          ld      h, a
-     461/     354 : 79                          ld      a, c
-     462/     355 : E6 07                       and     00000111b       ; Bitpos (0-7)
-     463/     357 : C9                          ret
-     464/     358 :                             
-     465/     358 :                     ;------------------------------------------------------------------------------
-     466/     358 :                     
-     467/     358 :                             ; RAM für GleEst
-     468/     358 :                             
-     469/     358 :                             align   100h     
-     470/     400 :                     buffer1:        
-     471/     400 :                             ds      100h
-     472/     500 :                     buffer2:        
-     473/     500 :                             ds      900h
-     474/     E00 :                     buffer2_end:    
-     475/     E00 :                             ds      20h
-     476/     E20 :                     stack:  
-     477/     E20 :                             
-     478/     E20 :                             
-     479/     E20 :                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 9 - 12/4/2024 13:2:9
+     420/     33A :                             
+     421/     33A :                             ; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
+     422/     33A :                             ; 0 =< Zeichenspalte =< 27H
+     423/     33A :                             ; 0 =< Pixelzeile =< 0FFH
+     424/     33A :                             
+     425/     33A : 78                          ld      a, b                    ; a=Pixelzeile merken
+     426/     33B : 41                          ld      b, c                    ; b=Zeichenspalte * 100H
+     427/     33C : 0E 00                       ld      c, 0
+     428/     33E : 21 00 84                    ld      hl, VRAM_START+4*256    ; Start + Bild mittig
+     429/     341 : 09                          add     hl, bc                  ; 8000H + Zeichenspalte * 100H
+     430/     342 : 06 00                       ld      b, 0
+     431/     344 : 4F                          ld      c, a
+     432/     345 : 09                          add     hl, bc                  ; (8000H + Zeichenspalte * 100H) + Pixelzeile
+     433/     346 : F1                          pop     af      
+     434/     347 : C9                          ret
+     435/     348 :                     
+     436/     348 :                     ;------------------------------------------------------------------------------
+     437/     348 :                     ; in:  AC = Y,X (Pixelzeile, Pixelspalte)
+     438/     348 :                     ; out: HL = VRAM, A = Bitpos (3 Bit binär)
+     439/     348 :                     ;
+     440/     348 :                     ; TIPP von KaiOr
+     441/     348 :                     ;------------------------------------------------------------------------------
+     442/     348 :                     
+     443/     348 :                     XPY_to_VRAM:
+     444/     348 :                             
+     445/     348 : 6F                          ld      l, a
+     446/     349 :                             
+     447/     349 :                             ; Pixelspalte / 8 = Zeichenspalte
+     448/     349 :                             
+     449/     349 : 79                          ld      a, c
+     450/     34A : 1F                          rra
+     451/     34B : 1F                          rra
+     452/     34C : 1F                          rra
+     453/     34D : E6 1F                       and     1Fh             ;Bit 7-5 loeschen
+     454/     34F :                             
+     455/     34F :                             ; aus KC85/4 System-Handbuch S.112
+     456/     34F :                             
+     457/     34F :                             ; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
+     458/     34F :                             ; 0 =< Zeichenspalte =< 27H
+     459/     34F :                             ; 0 =< Pixelzeile =< 0FFH
+     460/     34F :                             
+     461/     34F : F6 80                       or      80h             ;Adressbereich auf obere 8000H heben
+     462/     351 : C6 04                       add     a, 4            ;Bild mittig
+     463/     353 : 67                          ld      h, a
+     464/     354 : 79                          ld      a, c
+     465/     355 : E6 07                       and     00000111b       ; Bitpos (0-7)
+     466/     357 : C9                          ret
+     467/     358 :                             
+     468/     358 :                     ;------------------------------------------------------------------------------
+     469/     358 :                     
+     470/     358 :                             ; RAM für GleEst
+     471/     358 :                             
+     472/     358 :                             align   100h     
+     473/     400 :                     buffer1:        
+     474/     400 :                             ds      100h
+     475/     500 :                     buffer2:        
+     476/     500 :                             ds      900h
+     477/     E00 :                     buffer2_end:    
+     478/     E00 :                             ds      20h
+     479/     E20 :                     stack:  
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 9 - 12/4/2024 22:10:39
 
 
-     480/     E20 :                     
-     481/     E20 :                     
+     480/     E20 :                             
+     481/     E20 :                             
      482/     E20 :                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 10 - 12/4/2024 13:2:9
+     483/     E20 :                     
+     484/     E20 :                     
+     485/     E20 :                     
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 10 - 12/4/2024 22:10:39
 
 
   Symbol Table (* = unused):
   --------------------------
 
 *ARCHITECTURE :                                        "i386-unknown-win32" - |
- BACKW :                        28A C |  BASE :                         200 - |
+ BACKW :                        290 C |  BASE :                         200 - |
  BUFFER1 :                      400 C |  BUFFER2 :                      500 C |
  BUFFER2_END :                 0E00 C | *CASESENSITIVE :                  0 - |
  CLS :                          300 C | *CONSTPI :        3.141592653589793 - |
-*DATE :                 "12/4/2024" - |  DONTPLOT :                     280 C |
+*DATE :                 "12/4/2024" - |  DONTPLOT :                     286 C |
  D_LOOP :                       218 C | *FALSE :                          0 - |
- FORW :                         295 C | *FULLPMMU :                       1 - |
+ FORW :                         29B C | *FULLPMMU :                       1 - |
 *HAS64 :                          0 - | *HASFPU :                         0 - |
 *HASPMMU :                        0 - | *INSUPMODE :                      0 - |
 *LISTON :                         1 - |  LOOP :                         215 C |
@@ -529,10 +532,10 @@
 *MOMCPU :                        80 - | *MOMCPUNAME :                 "Z80" - |
 *NESTMAX :                      100 - | *PADDING :                        1 - |
 *PALETTE :                      2F2 C | *PLOT :                         255 C |
- PROC :                         220 C |  RANDOM :                       287 C |
+ PROC :                         220 C |  RANDOM :                       28D C |
 *RELAXED :                        0 - |  SPRITE :                       300 C |
 *STACK :                       0E20 C | *START :                        20A C |
-*TIME :                    "13:2:9" - | *TRUE :                           1 - |
+*TIME :                  "22:10:39" - | *TRUE :                           1 - |
 *VERSION :                     142F - |  VRAM_END :                   0A7FF - |
  VRAM_START :                  8000 - |  XPY_TO_VRAM :                  348 C |
 *XPY_TO_VRAM_OLD :              32F C |
@@ -540,7 +543,7 @@
      42 symbols
      25 unused symbols
 
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 11 - 12/4/2024 13:2:9
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 11 - 12/4/2024 22:10:39
 
 
   Defined Functions:
@@ -548,7 +551,7 @@
 
 LO                                    | HI                                   
 
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 12 - 12/4/2024 13:2:9
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 12 - 12/4/2024 22:10:39
 
 
   Code Pages:
@@ -558,9 +561,9 @@ STANDARD (0 changed characters)
 
 1 code page
 
-0.01 seconds assembly time
+0.02 seconds assembly time
 
-    482 lines source file
+    485 lines source file
       2 passes
       0 errors
       0 warnings

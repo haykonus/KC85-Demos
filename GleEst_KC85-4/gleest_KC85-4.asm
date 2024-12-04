@@ -225,16 +225,19 @@ start:
                                 ; P2-P0 = Hintergrundfarbe 
                                 ; I3-I0 = Vordergrundfarbe
 
-                
-                                ld      a, 00001010b    ; Anzeige Bild0, Farbebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0
-                                out     (84h), a        ; Farbebene einschalten  
+                                ld      a, (IX+1)        
+                                or      a, 00000010b    ; Farbebene ein
+                                ;ld      a, 00001010b   ; Anzeige Bild0, Farbebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0   
+                                out     (84h), a
 
                                 ld      a, (bc)         ; Farb-Attribut aus Palette holen
                                 ld      (HL), a         ; in Farbebene schreiben
 
-                                ld      a, 00001000b    ; Anzeige Bild0, Pixelebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0                 
-                                out     (84h), a        ; Pixelebene einschalten     
-                                
+                                ld      a, (IX+1)               
+                                and     a, 11111101b    ; Pixelebene ein
+                                ;ld      a, 00001000b   ; Anzeige Bild0, Pixelebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0                  
+                                out     (84h), a
+                                                                          
                         dontplot:
                                 pop     hl              
                                 
