@@ -1,4 +1,4 @@
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 1 - 12/4/2024 11:8:24
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 1 - 12/4/2024 11:46:52
 
 
        1/       0 :                     ;------------------------------------------------------------------------------
@@ -23,7 +23,7 @@
       20/     200 :                             
       21/     200 : 01 7F 7F 47 4C 45           db      1,7Fh,7Fh, 'GLEEST', 1
               206 : 45 53 54 01       
-      22/     20A :                     	
+      22/     20A :                             
       23/     20A :                     start:  
       24/     20A : CD 00 03                    call    cls
       25/     20D :                             
@@ -61,7 +61,7 @@
       57/     21F :                                                     
       58/     21F : D9                                                  exx                     
       59/     220 :                                                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 2 - 12/4/2024 11:8:24
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 2 - 12/4/2024 11:46:52
 
 
       60/     220 : 7D                                                  proc:   ld      a,L
@@ -124,7 +124,7 @@
      117/     255 :                                             plot:
      118/     255 : 7B                                                  ld      a,e
      119/     256 : 1F                                                  rra
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 3 - 12/4/2024 11:8:24
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 3 - 12/4/2024 11:46:52
 
 
      120/     257 : FE FF                                               cp      0ffh            ; Y max  
@@ -156,38 +156,38 @@
      146/     25A :                                                     ; out: HL = VRAM, A = Bitpos (3-Bit binär)
      147/     25A :                                                     
      148/     25A :                                                     
-     149/     25A :                     				;--- TIPP von KaiOr ---------------------------------------
+     149/     25A :                                                     ;--- TIPP von KaiOr ---------------------------------------
      150/     25A :                     
-     151/     25A :                     				;call    c,XPY_to_VRAM     
+     151/     25A :                                                     ;call    c,XPY_to_VRAM     
      152/     25A :                     
-     153/     25A : 6F                  				ld 	l,a
+     153/     25A : 6F                                                  ld      l, a
      154/     25B :                     
-     155/     25B :                     				; Pixelspalte / 8 = Zeichenspalte
+     155/     25B :                                                     ; Pixelspalte / 8 = Zeichenspalte
      156/     25B :                     
-     157/     25B : 79                  				ld 	a,c
-     158/     25C : 1F                  				rra
-     159/     25D : 1F                  				rra
-     160/     25E : 1F                  				rra
-     161/     25F : E6 1F               				and 	1Fh 		;Bit 7-5 loeschen
+     157/     25B : 79                                                  ld      a, c
+     158/     25C : 1F                                                  rra
+     159/     25D : 1F                                                  rra
+     160/     25E : 1F                                                  rra
+     161/     25F : E6 1F                                               and     1Fh             ;Bit 7-5 loeschen
      162/     261 :                     
-     163/     261 :                     				; aus KC85/4 System-Handbuch S.112
-     164/     261 :                     				
-     165/     261 :                     				; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
-     166/     261 :                     				; 0 =< Zeichenspalte =< 27H
-     167/     261 :                     				; 0 =< Pixelzeile =< 0FFH
+     163/     261 :                                                     ; aus KC85/4 System-Handbuch S.112
+     164/     261 :                                                     
+     165/     261 :                                                     ; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
+     166/     261 :                                                     ; 0 =< Zeichenspalte =< 27H
+     167/     261 :                                                     ; 0 =< Pixelzeile =< 0FFH
      168/     261 :                     
-     169/     261 : F6 80               				or 	80h 		;Adressbereich auf obere 8000H heben
-     170/     263 : C6 04               				add 	a, 4 		;Bild mittig
-     171/     265 : 67                  				ld 	h, a
-     172/     266 : 79                  				ld 	a, c
-     173/     267 : E6 07               				and 	00000111b 	; Bitpos (0-7)
-     174/     269 :                     				
-     175/     269 :                     				;--- END TIPP ---------------------------------------------
-     176/     269 :                     				
+     169/     261 : F6 80                                               or      80h             ;Adressbereich auf obere 8000H heben
+     170/     263 : C6 04                                               add     a, 4            ;Bild mittig
+     171/     265 : 67                                                  ld      h, a
+     172/     266 : 79                                                  ld      a, c
+     173/     267 : E6 07                                               and     00000111b       ; Bitpos (0-7)
+     174/     269 :                                                     
+     175/     269 :                                                     ;--- END TIPP ---------------------------------------------
+     176/     269 :                                                     
      177/     269 : 06 02                                               ld      b,hi(sprite-1)          
      178/     26B : 2F                                                  cpl
      179/     26C : 4F                                                  ld      c,a             
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 4 - 12/4/2024 11:8:24
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 4 - 12/4/2024 11:46:52
 
 
      180/     26D : 0A                                                  ld      a,(bc)          ; BWS-Byte holen
@@ -250,7 +250,7 @@
      237/     283 :                                                     ; THE 'SET ATTRIBUTE BYTE' SUBROUTINE
      238/     283 :                                                     ; The appropriate attribute byte is identified and fetched. 
      239/     283 :                                                     ; The new value is formed by manipulating the old value, ATTR-T, MASK-T and
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 5 - 12/4/2024 11:8:24
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 5 - 12/4/2024 11:46:52
 
 
      240/     283 :                                                     ; P-FLAG. Finally this new value is copied to the attribute area.
@@ -313,7 +313,7 @@
      297/     2A9 : E6 07                                               and     07h
      298/     2AB : 70                                                  ld      (hl),b   
      299/     2AC : 2C                                                  inc     l
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 6 - 12/4/2024 11:8:24
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 6 - 12/4/2024 11:46:52
 
 
      300/     2AD : 77                                                  ld      (hl),a  
@@ -376,7 +376,7 @@
      357/     2F2 :                     
      358/     2F2 : 28                          db      00101000b       ; GB
      359/     2F3 : 20                          db      00100000b       ; G  
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 7 - 12/4/2024 11:8:24
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 7 - 12/4/2024 11:46:52
 
 
      360/     2F4 : 30                          db      00110000b       ; GR 
@@ -439,7 +439,7 @@
      417/     31F : 01 FF 27                    ld      bc, VRAM_END-VRAM_START
      418/     322 : ED B0                       ldir
      419/     324 :                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 8 - 12/4/2024 11:8:24
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 8 - 12/4/2024 11:46:52
 
 
      420/     324 : DD 7E 01                    ld      a, (IX+1)               ; streng nach Vorschrift ...
@@ -502,11 +502,11 @@
      477/     E20 :                     
      478/     E20 :                     
      479/     E20 :                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 9 - 12/4/2024 11:8:24
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 9 - 12/4/2024 11:46:52
 
 
      480/     E20 :                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 10 - 12/4/2024 11:8:24
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 10 - 12/4/2024 11:46:52
 
 
   Symbol Table (* = unused):
@@ -530,7 +530,7 @@
 *PLOT :                         255 C |  PROC :                         220 C |
  RANDOM :                       294 C | *RELAXED :                        0 - |
  SPRITE :                       300 C | *STACK :                       0E20 C |
-*START :                        20A C | *TIME :                   "11:8:24" - |
+*START :                        20A C | *TIME :                  "11:46:52" - |
 *TRUE :                           1 - | *VERSION :                     142F - |
  VRAM_END :                   0A7FF - |  VRAM_START :                  8000 - |
 *XPY_TO_VRAM :                  32F C |
@@ -538,7 +538,7 @@
      42 symbols
      26 unused symbols
 
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 11 - 12/4/2024 11:8:24
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 11 - 12/4/2024 11:46:52
 
 
   Defined Functions:
@@ -546,7 +546,7 @@
 
 LO                                    | HI                                   
 
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 12 - 12/4/2024 11:8:24
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 12 - 12/4/2024 11:46:52
 
 
   Code Pages:
