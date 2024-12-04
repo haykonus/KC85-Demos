@@ -145,34 +145,7 @@ start:
                                 ; in:  BC = Y,X 
                                 ; out: HL = VRAM, A = Bitpos (3-Bit binär)
                                 
-                                
-                                ;--- TIPP von KaiOr ---------------------------------------
-
-                                ;call    c,XPY_to_VRAM     
-
-                                ld      l, a
-
-                                ; Pixelspalte / 8 = Zeichenspalte
-
-                                ld      a, c
-                                rra
-                                rra
-                                rra
-                                and     1Fh             ;Bit 7-5 loeschen
-
-                                ; aus KC85/4 System-Handbuch S.112
-                                
-                                ; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
-                                ; 0 =< Zeichenspalte =< 27H
-                                ; 0 =< Pixelzeile =< 0FFH
-
-                                or      80h             ;Adressbereich auf obere 8000H heben
-                                add     a, 4            ;Bild mittig
-                                ld      h, a
-                                ld      a, c
-                                and     00000111b       ; Bitpos (0-7)
-                                
-                                ;--- END TIPP ---------------------------------------------
+                                call    c,XPY_to_VRAM     
                                 
                                 ld      b,hi(sprite-1)          
                                 cpl
@@ -429,7 +402,7 @@ cls:
 ; out: HL = VRAM, A = Bitpos (3 Bit binär)
 ;------------------------------------------------------------------------------
 
-XPY_to_VRAM:
+XPY_to_VRAM_old:
 
         ld      a, c
         and     a, 00000111b    ; Bitpos (0-7)
@@ -457,9 +430,39 @@ XPY_to_VRAM:
         add     hl, bc                  ; (8000H + Zeichenspalte * 100H) + Pixelzeile
         pop     af      
         ret
-        
-end
 
+;------------------------------------------------------------------------------
+; in:  BC = Y,X (Pixelzeile, Pixelspalte)
+; out: HL = VRAM, A = Bitpos (3 Bit binär)
+;
+; TIPP von KaiOr
+;------------------------------------------------------------------------------
+
+XPY_to_VRAM:
+	
+	ld      l, a
+	
+	; Pixelspalte / 8 = Zeichenspalte
+	
+	ld      a, c
+	rra
+	rra
+	rra
+	and     1Fh             ;Bit 7-5 loeschen
+	
+	; aus KC85/4 System-Handbuch S.112
+	
+	; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
+	; 0 =< Zeichenspalte =< 27H
+	; 0 =< Pixelzeile =< 0FFH
+	
+	or      80h             ;Adressbereich auf obere 8000H heben
+	add     a, 4            ;Bild mittig
+	ld      h, a
+	ld      a, c
+	and     00000111b       ; Bitpos (0-7)
+	ret
+	
 ;------------------------------------------------------------------------------
 
         ; RAM für GleEst
