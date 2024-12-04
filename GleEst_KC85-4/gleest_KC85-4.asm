@@ -118,9 +118,7 @@ start:
                                 ld      a,e
                                 rra
                                 cp      0ffh            ; Y max  
-                                
-                                ld      b,a
-
+                                                         
                                 ;
                                 ; Pixel schreiben
                                 ;
@@ -129,20 +127,20 @@ start:
                                 ; ZX Spectrum 
                                 ;-------------------------------                                
 
-                                ; THE 'PIXEL ADDRESS' SUBROUTINE
+                                ; THE 'PIXEL ADDRESS' SUBROUTINE (22AAh)
                                 ; This subroutine is called by the POINT subroutine and by the PLOT command routine. 
                                 ; Is is entered with the co-ordinates of a pixel in the BC register pair and returns 
                                 ; with HL holding the address of the display file byte which contains that pixel 
                                 ; and A pointing to the position of the pixel within the byte.
                 
-                                ;call   c,22b0h         -> Spectrum ROM
+                                ;call   c,22b0h         -> Spectrum ROM       in: co-ordinates of a pixel in the AC
                                 
                                 ;-------------------------------
                                 ; KC85/4
                                 ;-------------------------------                                
                                 
                                 ; XPY_to_VRAM
-                                ; in:  BC = Y,X 
+                                ; in:  AC = Y,X 
                                 ; out: HL = VRAM, A = Bitpos (3-Bit binär)
                                 
                                 call    c,XPY_to_VRAM     
@@ -398,12 +396,13 @@ cls:
         ret
         
 ;------------------------------------------------------------------------------
-; in:  BC = Y,X (Pixelzeile, Pixelspalte)
+; in:  AC = Y,X (Pixelzeile, Pixelspalte)
 ; out: HL = VRAM, A = Bitpos (3 Bit binär)
 ;------------------------------------------------------------------------------
 
 XPY_to_VRAM_old:
 
+        ld      b, a            
         ld      a, c
         and     a, 00000111b    ; Bitpos (0-7)
         push    af              ; Bitpos merken
@@ -432,37 +431,37 @@ XPY_to_VRAM_old:
         ret
 
 ;------------------------------------------------------------------------------
-; in:  BC = Y,X (Pixelzeile, Pixelspalte)
+; in:  AC = Y,X (Pixelzeile, Pixelspalte)
 ; out: HL = VRAM, A = Bitpos (3 Bit binär)
 ;
 ; TIPP von KaiOr
 ;------------------------------------------------------------------------------
 
 XPY_to_VRAM:
-	
-	ld      l, b
-	
-	; Pixelspalte / 8 = Zeichenspalte
-	
-	ld      a, c
-	rra
-	rra
-	rra
-	and     1Fh             ;Bit 7-5 loeschen
-	
-	; aus KC85/4 System-Handbuch S.112
-	
-	; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
-	; 0 =< Zeichenspalte =< 27H
-	; 0 =< Pixelzeile =< 0FFH
-	
-	or      80h             ;Adressbereich auf obere 8000H heben
-	add     a, 4            ;Bild mittig
-	ld      h, a
-	ld      a, c
-	and     00000111b       ; Bitpos (0-7)
-	ret
-	
+        
+        ld      l, a
+        
+        ; Pixelspalte / 8 = Zeichenspalte
+        
+        ld      a, c
+        rra
+        rra
+        rra
+        and     1Fh             ;Bit 7-5 loeschen
+        
+        ; aus KC85/4 System-Handbuch S.112
+        
+        ; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
+        ; 0 =< Zeichenspalte =< 27H
+        ; 0 =< Pixelzeile =< 0FFH
+        
+        or      80h             ;Adressbereich auf obere 8000H heben
+        add     a, 4            ;Bild mittig
+        ld      h, a
+        ld      a, c
+        and     00000111b       ; Bitpos (0-7)
+        ret
+        
 ;------------------------------------------------------------------------------
 
         ; RAM für GleEst
