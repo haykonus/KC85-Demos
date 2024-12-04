@@ -440,7 +440,7 @@ XPY_to_VRAM_old:
 
 XPY_to_VRAM:
 	
-	ld      l, a
+	ld      l, b
 	
 	; Pixelspalte / 8 = Zeichenspalte
 	

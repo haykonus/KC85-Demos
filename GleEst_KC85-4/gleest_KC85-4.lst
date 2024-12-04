@@ -1,4 +1,4 @@
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 1 - 12/4/2024 12:6:19
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 1 - 12/4/2024 12:24:27
 
 
        1/       0 :                     ;------------------------------------------------------------------------------
@@ -61,7 +61,7 @@
       57/     21F :                                                     
       58/     21F : D9                                                  exx                     
       59/     220 :                                                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 2 - 12/4/2024 12:6:19
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 2 - 12/4/2024 12:24:27
 
 
       60/     220 : 7D                                                  proc:   ld      a,L
@@ -124,7 +124,7 @@
      117/     255 :                                             plot:
      118/     255 : 7B                                                  ld      a,e
      119/     256 : 1F                                                  rra
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 3 - 12/4/2024 12:6:19
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 3 - 12/4/2024 12:24:27
 
 
      120/     257 : FE FF                                               cp      0ffh            ; Y max  
@@ -187,7 +187,7 @@
      177/     271 : 0F                                                  rrca    
      178/     272 : 0F                                                  rrca    
      179/     273 : 0F                                                  rrca
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 4 - 12/4/2024 12:6:19
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 4 - 12/4/2024 12:24:27
 
 
      180/     274 : F6 F0                                               or      11110000b
@@ -250,7 +250,7 @@
      237/     27D : 3E 08                                               ld      a, 00001000b    ; Anzeige Bild0, Pixelebene ein, Zugriff auf Bild0, LowRes, RAM8-Block0                 
      238/     27F : D3 84                                               out     (84h), a        ; Pixelebene einschalten     
      239/     281 :                                                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 5 - 12/4/2024 12:6:19
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 5 - 12/4/2024 12:24:27
 
 
      240/     281 :                                             dontplot:
@@ -313,7 +313,7 @@
      297/     2F2 : =>FALSE                      if 0 = 1
      298/     2F2 :                             ;----------------------------------------
      299/     2F2 :                             ; ZX Spectrum 
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 6 - 12/4/2024 12:6:19
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 6 - 12/4/2024 12:24:27
 
 
      300/     2F2 :                             ;----------------------------------------       
@@ -376,7 +376,7 @@
      357/     300 :                     ; Bit 0 - Anzeige Bild 0 oder 1
      358/     300 :                     ; Bit 1 - Zugriff auf Pixel- oder Farbebene(Pixel = 0 oder Farbe = 1)
      359/     300 :                     ; Bit 2 - Zugriff auf Bild 0 oder 1
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 7 - 12/4/2024 12:6:19
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 7 - 12/4/2024 12:24:27
 
 
      360/     300 :                     ; Bit 3 - hohe Farbauflösung ein/aus(0 = hohe oder 1 = niedrige)
@@ -439,7 +439,7 @@
      417/     339 :                             ; aus KC85/5 System-Handbuch S.231
      418/     339 :                             
      419/     339 :                             ; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 8 - 12/4/2024 12:6:19
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 8 - 12/4/2024 12:24:27
 
 
      420/     339 :                             ; 0 =< Zeichenspalte =< 27H
@@ -465,7 +465,7 @@
      440/     347 :                     
      441/     347 :                     XPY_to_VRAM:
      442/     347 :                     	
-     443/     347 : 6F                  	ld      l, a
+     443/     347 : 68                  	ld      l, b
      444/     348 :                     	
      445/     348 :                     	; Pixelspalte / 8 = Zeichenspalte
      446/     348 :                     	
@@ -502,14 +502,14 @@
      477/     E20 :                     stack:  
      478/     E20 :                             
      479/     E20 :                             
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 9 - 12/4/2024 12:6:19
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 9 - 12/4/2024 12:24:27
 
 
      480/     E20 :                     
      481/     E20 :                     
      482/     E20 :                     
      483/     E20 :                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 10 - 12/4/2024 12:6:19
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 10 - 12/4/2024 12:24:27
 
 
   Symbol Table (* = unused):
@@ -533,7 +533,7 @@
  PROC :                         220 C |  RANDOM :                       288 C |
 *RELAXED :                        0 - |  SPRITE :                       300 C |
 *STACK :                       0E20 C | *START :                        20A C |
-*TIME :                   "12:6:19" - | *TRUE :                           1 - |
+*TIME :                  "12:24:27" - | *TRUE :                           1 - |
 *VERSION :                     142F - |  VRAM_END :                   0A7FF - |
  VRAM_START :                  8000 - |  XPY_TO_VRAM :                  347 C |
 *XPY_TO_VRAM_OLD :              32F C |
@@ -541,7 +541,7 @@
      42 symbols
      25 unused symbols
 
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 11 - 12/4/2024 12:6:19
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 11 - 12/4/2024 12:24:27
 
 
   Defined Functions:
@@ -549,7 +549,7 @@
 
 LO                                    | HI                                   
 
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 12 - 12/4/2024 12:6:19
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 12 - 12/4/2024 12:24:27
 
 
   Code Pages:
@@ -559,7 +559,7 @@ STANDARD (0 changed characters)
 
 1 code page
 
-0.00 seconds assembly time
+0.01 seconds assembly time
 
     483 lines source file
       2 passes
