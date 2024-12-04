@@ -2,7 +2,7 @@
 ; Titel:                GleEst für KC85/4
 ;
 ; Erstellt:             20.11.2024
-; Letzte Änderung:      03.12.2024
+; Letzte Änderung:      04.12.2024
 ;------------------------------------------------------------------------------ 
 
         cpu     z80
@@ -145,8 +145,35 @@ start:
                                 ; in:  BC = Y,X 
                                 ; out: HL = VRAM, A = Bitpos (3-Bit binär)
                                 
-                                call    c,XPY_to_VRAM     
+                                
+				;--- TIPP von KaiOr ---------------------------------------
 
+				;call    c,XPY_to_VRAM     
+
+				ld 	l,a
+
+				; Pixelspalte / 8 = Zeichenspalte
+
+				ld 	a,c
+				rra
+				rra
+				rra
+				and 	1Fh 		;Bit 7-5 loeschen
+
+				; aus KC85/4 System-Handbuch S.112
+				
+				; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
+				; 0 =< Zeichenspalte =< 27H
+				; 0 =< Pixelzeile =< 0FFH
+
+				or 	80h 		;Adressbereich auf obere 8000H heben
+				add 	a, 4 		;Bild mittig
+				ld 	h, a
+				ld 	a, c
+				and 	00000111b 	; Bitpos (0-7)
+				
+				;--- END TIPP ---------------------------------------------
+				
                                 ld      b,hi(sprite-1)          
                                 cpl
                                 ld      c,a             
