@@ -19,7 +19,7 @@ VRAM_END        equ     0A7FFh
                 org     BASE
         
         db      1,7Fh,7Fh, 'GLEEST', 1
-	
+        
 start:  
         call    cls
         
@@ -146,34 +146,34 @@ start:
                                 ; out: HL = VRAM, A = Bitpos (3-Bit binär)
                                 
                                 
-				;--- TIPP von KaiOr ---------------------------------------
+                                ;--- TIPP von KaiOr ---------------------------------------
 
-				;call    c,XPY_to_VRAM     
+                                ;call    c,XPY_to_VRAM     
 
-				ld 	l,a
+                                ld      l, a
 
-				; Pixelspalte / 8 = Zeichenspalte
+                                ; Pixelspalte / 8 = Zeichenspalte
 
-				ld 	a,c
-				rra
-				rra
-				rra
-				and 	1Fh 		;Bit 7-5 loeschen
+                                ld      a, c
+                                rra
+                                rra
+                                rra
+                                and     1Fh             ;Bit 7-5 loeschen
 
-				; aus KC85/4 System-Handbuch S.112
-				
-				; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
-				; 0 =< Zeichenspalte =< 27H
-				; 0 =< Pixelzeile =< 0FFH
+                                ; aus KC85/4 System-Handbuch S.112
+                                
+                                ; Adresse = 8000H + Zeichenspalte * 100H + Pixelzeile
+                                ; 0 =< Zeichenspalte =< 27H
+                                ; 0 =< Pixelzeile =< 0FFH
 
-				or 	80h 		;Adressbereich auf obere 8000H heben
-				add 	a, 4 		;Bild mittig
-				ld 	h, a
-				ld 	a, c
-				and 	00000111b 	; Bitpos (0-7)
-				
-				;--- END TIPP ---------------------------------------------
-				
+                                or      80h             ;Adressbereich auf obere 8000H heben
+                                add     a, 4            ;Bild mittig
+                                ld      h, a
+                                ld      a, c
+                                and     00000111b       ; Bitpos (0-7)
+                                
+                                ;--- END TIPP ---------------------------------------------
+                                
                                 ld      b,hi(sprite-1)          
                                 cpl
                                 ld      c,a             
