@@ -1,4 +1,4 @@
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 1 - 12/5/2024 17:51:42
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 1 - 12/5/2024 18:1:59
 
 
        1/       0 :                     ;------------------------------------------------------------------------------
@@ -61,7 +61,7 @@
       57/     226 : 23                                                  inc     hl
       58/     227 :                                                                                                        
       59/     227 : 1A                                                  ld      a,(de)          ;BWS-Byte holen (t)     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 2 - 12/5/2024 17:51:42
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 2 - 12/5/2024 18:1:59
 
 
       60/     228 : A6                                                  and     (hl)            ;mit BWS-Byte (t-1) kombinieren (Bits löschen)                                               
@@ -124,7 +124,7 @@
      117/     25A : 7A                                                  ld      a,d
      118/     25B : 80                                                  add     a,b
      119/     25C : CB 3F                                               srl     a
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 3 - 12/5/2024 17:51:42
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 3 - 12/5/2024 18:1:59
 
 
      120/     25E : 20 31                                               jr      nz,dontplot
@@ -187,7 +187,7 @@
      177/     27A :                                                     
      178/     27A : D9                                                  exx
      179/     27B :                                                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 4 - 12/5/2024 17:51:42
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 4 - 12/5/2024 18:1:59
 
 
      180/     27B : 0F                                                  rrca    
@@ -250,7 +250,7 @@
      237/     288 :                     
      238/     288 : 0A                                                  ld      a, (bc)         ; Farb-Attribut aus Palette holen
      239/     289 : 77                                                  ld      (HL), a         ; in Farbebene schreiben
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 5 - 12/5/2024 17:51:42
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 5 - 12/5/2024 18:1:59
 
 
      240/     28A :                     
@@ -313,7 +313,7 @@
      297/     2F2 :                     
      298/     2F2 :                             ; F=blinken
      299/     2F2 :                             ; H=hell, G=grün, R=rot, B=blau
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 6 - 12/5/2024 17:51:42
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 6 - 12/5/2024 18:1:59
 
 
      300/     2F2 :                             ; P2-P0   = Hintergrundfarbe 
@@ -376,7 +376,7 @@
      357/     300 :                     ; KC85/4 Grafik-Routinen
      358/     300 :                     ;------------------------------------------------------------------------------
      359/     300 :                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 7 - 12/5/2024 17:51:42
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 7 - 12/5/2024 18:1:59
 
 
      360/     300 :                     ; KC85/5 Systemhandbuch S.127
@@ -439,7 +439,7 @@
      417/     334 :                             
      418/     334 :                             ; Pixelspalte / 8 = Zeichenspalte
      419/     334 :                             
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 8 - 12/5/2024 17:51:42
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 8 - 12/5/2024 18:1:59
 
 
      420/     334 : CB 39                       srl     c
@@ -502,7 +502,7 @@
      477/     358 :                     ; 2. (stack) = 5555h, damit GleEst startet, wegen ex (sp),hl
      478/     358 :                     ;------------------------------------------------------------------------------
      479/     358 :                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 9 - 12/5/2024 17:51:42
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 9 - 12/5/2024 18:1:59
 
 
      480/     358 :                     initGleEst:
@@ -549,7 +549,7 @@
      521/     E40 :                     
      522/     E40 :                     
      523/     E40 :                     
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 10 - 12/5/2024 17:51:42
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 10 - 12/5/2024 18:1:59
 
 
   Symbol Table (* = unused):
@@ -575,7 +575,7 @@
  PROC :                         22B C |  RANDOM :                       298 C |
 *RELAXED :                        0 - |  SPRITE :                       300 C |
  STACK :                       0E40 C | *START :                        209 C |
-*TIME :                  "17:51:42" - | *TRUE :                           1 - |
+*TIME :                   "18:1:59" - | *TRUE :                           1 - |
 *VERSION :                     142F - |  VRAM_END :                   0A7FF - |
  VRAM_START :                  8000 - |  XPY_TO_VRAM :                  348 C |
 *XPY_TO_VRAM_OLD :              32F C |
@@ -583,7 +583,7 @@
      46 symbols
      25 unused symbols
 
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 11 - 12/5/2024 17:51:42
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 11 - 12/5/2024 18:1:59
 
 
   Defined Functions:
@@ -591,7 +591,7 @@
 
 LO                                    | HI                                   
 
- AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 12 - 12/5/2024 17:51:42
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-4.asm - Page 12 - 12/5/2024 18:1:59
 
 
   Code Pages:
