@@ -18,22 +18,27 @@ VRAM_END        equ     0A7FFh
         endif   
                 org     BASE
         
-        db      1,7Fh,7Fh, 'GLEEST', 1
+        db      7Fh,7Fh, 'GLEEST', 1
         
 start:  
         call    cls
+	call	initGleEst
         
 ;------------------------------------------------------------------------------
         
         ; Start GleEst
 
-        DI
-        ;ld      sp, stack
+        ;DI
+        ld      sp, stack
         ld      hl, buffer1
         
         exx
 
         loop_ix:
+	
+		CALL 	0F003H		; Programmverteiler PV1
+		db	0Ch		; KBDS Tastenstatusabfrage 
+		jp	c,0E000h	; Reset
 
                 ld      hl,buffer2
                 loop:   
@@ -91,13 +96,13 @@ start:
                                 jr      z, proc
 
                                 pop     bc
-                                ex      (sp),hl
+                                ex      (sp),hl		;hl = (sp)
                                 
                                 exx
                                 
-                                ld      a,b
+                                ld      a,b	
                                 
-                                exx
+                                exx			;hl = (sp)
                                 
                                 cp      10h
                                 jr      c,dontplot
@@ -466,18 +471,51 @@ XPY_to_VRAM:
         ret
         
 ;------------------------------------------------------------------------------
+; 1. buffer2 wird mit Adresse von "dummy" und 55h initialisiert, damit beim 
+;    Start von GleEst keine undefinierten Schreibvorgänge im RAM erfolgen können.
+;
+; 2. (stack) = 5555h, damit GleEst startet, wegen ex (sp),hl
+;------------------------------------------------------------------------------
 
+initGleEst:
+
+	ld	bc, (buffer2_end-buffer2)/3
+	ld	hl, buffer2
+	ld	de, dummy
+fb1:	ld	(hl), e
+	inc	hl
+	ld	(hl), d
+	inc	hl
+	ld	(hl), 55h
+	inc	hl
+	
+	dec	bc
+	ld	a, b
+	or	c
+	jr	nz, fb1
+	
+	ld	hl, 0001h	; (stack) darf nicht 0 sein
+
+	ld	(stack), hl
+	ret
+
+;------------------------------------------------------------------------------
+end
+		
         ; RAM für GleEst
-        
+	
+dummy:	db	55h  
+   
         align   100h     
 buffer1:        
         ds      100h
 buffer2:        
         ds      900h
-buffer2_end:    
-        ds      20h
+buffer2_end:  
+  
+        ds      40h
 stack:  
-        
+  
         
 
 
