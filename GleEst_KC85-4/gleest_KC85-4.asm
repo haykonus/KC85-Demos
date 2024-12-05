@@ -22,7 +22,7 @@ VRAM_END        equ     0A7FFh
         
 start:  
         call    cls
-	call	initGleEst
+        call    initGleEst
         
 ;------------------------------------------------------------------------------
         
@@ -35,10 +35,10 @@ start:
         exx
 
         loop_ix:
-	
-		CALL 	0F003H		; Programmverteiler PV1
-		db	0Ch		; KBDS Tastenstatusabfrage 
-		jp	c,0E000h	; Reset
+        
+                CALL    0F003H          ; Programmverteiler PV1
+                db      0Ch             ; KBDS Tastenstatusabfrage 
+                jp      c,0E000h        ; Reset
 
                 ld      hl,buffer2
                 loop:   
@@ -96,13 +96,13 @@ start:
                                 jr      z, proc
 
                                 pop     bc
-                                ex      (sp),hl		;hl = (sp)
+                                ex      (sp),hl         ;hl = (sp)
                                 
                                 exx
                                 
-                                ld      a,b	
+                                ld      a,b     
                                 
-                                exx			;hl = (sp)
+                                exx                     ;hl = (sp)
                                 
                                 cp      10h
                                 jr      c,dontplot
@@ -479,32 +479,32 @@ XPY_to_VRAM:
 
 initGleEst:
 
-	ld	bc, (buffer2_end-buffer2)/3
-	ld	hl, buffer2
-	ld	de, dummy
-fb1:	ld	(hl), e
-	inc	hl
-	ld	(hl), d
-	inc	hl
-	ld	(hl), 55h
-	inc	hl
-	
-	dec	bc
-	ld	a, b
-	or	c
-	jr	nz, fb1
-	
-	ld	hl, 0001h	; (stack) darf nicht 0 sein
+        ld      bc, (buffer2_end-buffer2)/3
+        ld      hl, buffer2
+        ld      de, dummy
+fb1:    ld      (hl), e
+        inc     hl
+        ld      (hl), d
+        inc     hl
+        ld      (hl), 55h
+        inc     hl
+        
+        dec     bc
+        ld      a, b
+        or      c
+        jr      nz, fb1
+        
+        ld      hl, 0001h       ; (stack) darf nicht 0 sein
 
-	ld	(stack), hl
-	ret
+        ld      (stack), hl
+        ret
 
 ;------------------------------------------------------------------------------
 end
-		
+                
         ; RAM für GleEst
-	
-dummy:	db	55h  
+        
+dummy:  db      55h  
    
         align   100h     
 buffer1:        
