@@ -19,7 +19,7 @@ Zum Assemblieren wurde der [Arnold-Assembler](http://john.ccac.rwth-aachen.de:80
 - oder [JKCEMU](http://www.jens-mueller.org/jkcemu/index.html)
 
 ## Schnellstart
-> [!NOTE]
+> [!CAUTION]
 > Die Links unten anklicken und danach den Download-Button (Download raw file) im Github klicken, um die Datei zu laden.
 
 - [gleest_KC85-4_0200H.bin](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-4/gleest_KC85-4_0200H.bin)
@@ -35,6 +35,10 @@ oder
 
 - [gleest_KC85-4_0200H.wav](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-4/gleest_KC85-4_0200H.wav)
 - mit LOAD laden (Autostart)
+
+
+> [!TIP]
+> Das Programm kann mit Drücken einer beliebigen Taste beendet werden.
 
 
 ## Quellen
