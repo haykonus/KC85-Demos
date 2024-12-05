@@ -474,7 +474,7 @@ XPY_to_VRAM:
 ; 1. buffer2 wird mit Adresse von "dummy" und 55h initialisiert, damit beim 
 ;    Start von GleEst keine undefinierten Schreibvorgänge im RAM erfolgen können.
 ;
-; 2. (stack) = 5555h, damit GleEst startet, wegen ex (sp),hl
+; 2. (stack) = 0001h, damit GleEst startet, wegen ex (sp),hl
 ;------------------------------------------------------------------------------
 
 initGleEst:
