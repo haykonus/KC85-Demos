@@ -35,10 +35,14 @@ start:
         exx
 
         loop_ix:
+	
+		; TIPP von Crawler
+		bit     0,(ix+8)	 ; Tastenstatusabfrage
+                jp      nz, 0E000h
         
-                CALL    0F003H          ; Programmverteiler PV1
-                db      0Ch             ; KBDS Tastenstatusabfrage 
-                jp      c,0E000h        ; Reset
+                ;CALL    0F003H          ; Programmverteiler PV1
+                ;db      0Ch             ; KBDS Tastenstatusabfrage 
+                ;jp      c,0E000h        ; Reset
 
                 ld      hl,buffer2
                 loop:   
