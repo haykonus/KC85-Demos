@@ -28,10 +28,12 @@ start:
         
         ; Start GleEst
 
-        ;DI
-        ld      sp, stack
+	ld	sp, stack
+        ld      hl, 0001h       ; (stack) darf nicht 0 sein
+	push	hl
+	
         ld      hl, buffer1
-        
+   
         exx
 
         loop_ix:
@@ -126,7 +128,7 @@ start:
                         plot:
                                 ld      a,e
                                 rra
-                                cp      0ffh            ; Y max  
+                                ;cp      0ffh            ; Y max  
                                                          
                                 ;
                                 ; Pixel schreiben
@@ -152,8 +154,9 @@ start:
                                 ; in:  AC = Y,X 
                                 ; out: HL = VRAM, A = Bitpos (3-Bit binär)
                                 
-                                call    c,XPY_to_VRAM     
-                                
+                                ;call    c,XPY_to_VRAM  ; nur bei Abfrage von Y-max notwendig
+                                call    XPY_to_VRAM 
+				
                                 ld      b,hi(sprite-1)          
                                 cpl
                                 ld      c,a             
@@ -497,10 +500,7 @@ fb1:    ld      (hl), e
         ld      a, b
         or      c
         jr      nz, fb1
-        
-        ld      hl, 0001h       ; (stack) darf nicht 0 sein
-
-        ld      (stack), hl
+	
         ret
 
 ;------------------------------------------------------------------------------
@@ -517,7 +517,7 @@ buffer2:
         ds      900h
 buffer2_end:  
   
-        ds      40h
+        ds      100h
 stack:  
   
         
