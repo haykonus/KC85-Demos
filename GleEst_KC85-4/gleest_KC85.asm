@@ -8,26 +8,26 @@
 hi      function x,(x>>8)&255
 lo      function x, x&255  
 
-	cpu     z80
+        cpu     z80
 
-KC85_3	equ	3
-KC85_4	equ	4
-	
-	ifndef	KC_TYPE
-		KC_TYPE: set 	KC85_4
-	endif	
-	
+KC85_3  equ     3
+KC85_4  equ     4
+        
+        ifndef  KC_TYPE
+                KC_TYPE: set    KC85_4
+        endif   
+        
         ifndef  BASE
                 BASE:    set    0200H   
         endif   
-	 
+         
         org     BASE
-	
+        
         if KC_TYPE == KC85_3
         db      7Fh,7Fh, 'GLEEST3', 1
-	elseif	KC_TYPE == KC85_4
-	db      7Fh,7Fh, 'GLEEST4', 1
-	endif
+        elseif  KC_TYPE == KC85_4
+        db      7Fh,7Fh, 'GLEEST4', 1
+        endif
         
 start:  
         call    cls
@@ -37,24 +37,24 @@ start:
         
         ; Start GleEst
 
-	ld	sp, stack
+        ld      sp, stack
         ld      hl, 0001h       ; (stack) darf nicht 0 sein
-	push	hl
-	
+        push    hl
+        
         ld      hl, buffer1
    
         exx
 
         loop_ix:
-	
-		; TIPP von Crawler
-		bit     0,(ix+8)	 ; Tastenstatusabfrage
-                jp      nz, 0E000h	 ; Reset
+        
+                ; TIPP von Crawler
+                bit     0,(ix+8)         ; Tastenstatusabfrage
+                jp      nz, 0E000h       ; Reset
  
                 ;call    0F003H          ; Programmverteiler PV1
                 ;db      0Ch             ; KBDS Tastenstatusabfrage 
                 ;jp      c,0E000h        ; Reset
-		
+                
                 ld      hl,buffer2
                 loop:   
                         ;ld     bc,10FFh        ; nur wenige Punkte (für Test)
@@ -162,11 +162,11 @@ start:
                                 ; setPixel
                                 ; in:  AC = Y,X 
                                 ; KC85/3: out: HL = VRAM, DE = VRAM (Farbe) A = Bitpos (3-Bit binär)
-				; KC85/4: out: HL = VRAM, A = Bitpos (3-Bit binär)
-				   
+                                ; KC85/4: out: HL = VRAM, A = Bitpos (3-Bit binär)
+                                   
                                 ;call    c,setPixel  ; nur bei Abfrage von Y-max notwendig
                                 call    setPixel 
-				
+                                
                                 ld      b,hi(sprite-1)          
                                 cpl
                                 ld      c,a             
@@ -247,8 +247,8 @@ start:
                                 ; P2-P0 = Hintergrundfarbe 
                                 ; I3-I0 = Vordergrundfarbe
 
-                                call	setColor
-				
+                                call    setColor
+                                
                         dontplot:
                                 pop     hl              
                                 
@@ -288,9 +288,9 @@ start:
                         
                         exx                             
                         
-                        ld      a,hi(buffer2_end)-1	; 05,06, ... 0Dh
-                        cp      a,h			; 0Dh-0Eh -> CY, 
-							; buffer2_len = 0E00h-0500h = 900h                        
+                        ld      a,hi(buffer2_end)-1     ; 05,06, ... 0Dh
+                        cp      a,h                     ; 0Dh-0Eh -> CY, 
+                                                        ; buffer2_len = 0E00h-0500h = 900h                        
                 jp      nc,loop
                 
         jp      loop_ix
@@ -380,17 +380,17 @@ sprite:
 ;------------------------------------------------------------------------------
 
 VRAM_START      equ     08000h
-	if KC_TYPE == KC85_3
+        if KC_TYPE == KC85_3
 VRAM_END        equ     0B1FFh
-	elseif KC_TYPE == KC85_4
-VRAM_END        equ   	0A7FFh
-	endif
+        elseif KC_TYPE == KC85_4
+VRAM_END        equ     0A7FFh
+        endif
 ;------------------------------------------------------------------------------
 ; KC85/3
 ; Löscht Pixel/Farb-RAM
 ;------------------------------------------------------------------------------
 
-	if KC_TYPE == KC85_3
+        if KC_TYPE == KC85_3
 cls:
         ld      hl, VRAM_START
         xor     a                       ; alle Pixel aus
@@ -399,15 +399,15 @@ cls:
         ld      bc, VRAM_END-VRAM_START
         ldir
         ret
-	
-	endif
-	
+        
+        endif
+        
 ;------------------------------------------------------------------------------
 ; KC85/4
 ; Löscht Pixel/Farb-RAM0
 ;------------------------------------------------------------------------------
 
-	if KC_TYPE == KC85_4
+        if KC_TYPE == KC85_4
 cls:
         ld      hl, VRAM_START
         xor     a                       ; alle Pixel aus
@@ -432,10 +432,10 @@ cls:
         and     a, 11111101b            ; Pixelebene ein
         ld      (IX+1), a               ; streng nach Vorschrift ...    
         out     (84h), a  
-	
+        
         ret
-	
-	endif
+        
+        endif
         
 ;------------------------------------------------------------------------------
 ; KC85/3 -> (c) KaiOr, Forum www.robotrontechnik.de
@@ -443,8 +443,8 @@ cls:
 ; out: HL = VRAM (Pixel) , DE = VRAM (Farbe) A = Bitpos (3 Bit binär)
 ;------------------------------------------------------------------------------
 
-	if KC_TYPE == KC85_3
-	
+        if KC_TYPE == KC85_3
+        
 setPixel:
         ld      h, a
 
@@ -456,7 +456,7 @@ setPixel:
         srl     h
         srl     h
         scf
-        rr      h	
+        rr      h       
         rra
         srl     h
         rra
@@ -472,7 +472,7 @@ setPixel:
         ld      l, a
         rl      h
         jp      bsend
-bsrght:	rra
+bsrght: rra
         rra
         and      0eh
         ld      l, a
@@ -509,11 +509,11 @@ bsrght:	rra
 bsend:
         ld      a,c
         and     a, 00000111b       ; Bitpos (0-7)
-	
+        
         ret
-	
-	endif
-	
+        
+        endif
+        
 ;------------------------------------------------------------------------------
 ; KC85/4 -> (c) KaiOr, Forum www.robotrontechnik.de
 ; in:  AC = Y,X (Pixelzeile, Pixelspalte)
@@ -521,7 +521,7 @@ bsend:
 ;------------------------------------------------------------------------------
 
         if KC_TYPE == KC85_4
-	
+        
 setPixel:
         ld      l, a
         
@@ -579,8 +579,8 @@ setPixel_old:
         ld      c, a
         add     hl, bc                  ; (8000H + Zeichenspalte * 100H) + Pixelzeile
         pop     af      
-        ret	
-	
+        ret     
+        
         endif
 
 ;------------------------------------------------------------------------------
@@ -589,40 +589,40 @@ setPixel_old:
 ; out: Farbe im VRAM
 ;------------------------------------------------------------------------------
 
-	if KC_TYPE == KC85_3
-	
+        if KC_TYPE == KC85_3
+        
 setColor:
 
-	ld      a, (bc)         ; Farb-Attribut aus Palette holen
-	ld      (de), a         ; in Farbebene schreiben
-	ret
-	
-	endif
-	
+        ld      a, (bc)         ; Farb-Attribut aus Palette holen
+        ld      (de), a         ; in Farbebene schreiben
+        ret
+        
+        endif
+        
 ;------------------------------------------------------------------------------
 ; KC85/4 
 ; in:  BC = Palette, HL = VRAM
 ; out: Farbe im VRAM
 ;------------------------------------------------------------------------------
 
-	if KC_TYPE == KC85_4
+        if KC_TYPE == KC85_4
 
 setColor:
-	ld      a, (IX+1)        
-	or      a, 00000010b    ; Farbebene ein
-	out     (84h), a
+        ld      a, (IX+1)        
+        or      a, 00000010b    ; Farbebene ein
+        out     (84h), a
 
-	ld      a, (bc)         ; Farb-Attribut aus Palette holen
-	ld      (hl), a         ; in Farbebene schreiben
-		
-	ld      a, (IX+1)               
-	and     a, 11111101b    ; Pixelebene ein              
-	out     (84h), a
-	
-	ret
-	
-	endif
-	
+        ld      a, (bc)         ; Farb-Attribut aus Palette holen
+        ld      (hl), a         ; in Farbebene schreiben
+                
+        ld      a, (IX+1)               
+        and     a, 11111101b    ; Pixelebene ein              
+        out     (84h), a
+        
+        ret
+        
+        endif
+        
 ;----------------------------------------------------------------------------
 ; buffer2 wird mit Adresse von "dummy" und 55h initialisiert, damit beim 
 ; Start von GleEst keine undefinierten Schreibvorgänge im RAM erfolgen können.
@@ -644,7 +644,7 @@ fb1:    ld      (hl), e
         ld      a, b
         or      c
         jr      nz, fb1
-	
+        
         ret
 
 ;------------------------------------------------------------------------------
