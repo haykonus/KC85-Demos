@@ -291,7 +291,7 @@ start:
                         ld      a,hi(buffer2_end)       ; 0Eh
                         cp      a,h                     ; 0Eh-0Fh -> CY, 
                                                         ; buffer2_len = 0E00h-0500h = 0900h  
-							; 900h = C000h-B700h -> s. test Bit 6 im Original Code
+                                                        ; 900h = C000h-B700h -> s. test Bit 6 im Original Code
                 jp      nc,loop
                 
         jp      loop_ix
@@ -634,10 +634,10 @@ setColor:
 initGleEst:
 
         ld      bc, (buffer2_end+200h-buffer2)/3 ; noch um 200h weiter 
-						 ; füllen mit dummy's, damit
-						 ; Schreiben auf 0 verhindert
-						 ; wird
-	ld      hl, buffer2				
+                                                 ; füllen mit dummy's, damit
+                                                 ; Schreiben auf 0 verhindert
+                                                 ; wird
+        ld      hl, buffer2                             
         ld      de, dummy
 fb1:    ld      (hl), e
         inc     hl
@@ -665,9 +665,9 @@ buffer1:
         ds      100h
 buffer2:        
         ds      0900h
-buffer2_end:  		; wird noch um 77h überschritten :-(
+buffer2_end:            ; wird noch um 77h überschritten :-(
   
-        ds      200h	; zur Sicherheit
+        ds      200h    ; zur Sicherheit
 stack:  
   
   
