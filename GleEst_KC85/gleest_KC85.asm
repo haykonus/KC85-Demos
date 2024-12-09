@@ -159,13 +159,13 @@ start:
                                 ; KC85/3+4
                                 ;-------------------------------                                
                                 
-                                ; setPixel
+                                ; getVRAMadr
                                 ; in:  AC = Y,X 
                                 ; KC85/3: out: HL = VRAM, DE = VRAM (Farbe) A = Bitpos (3-Bit binär)
                                 ; KC85/4: out: HL = VRAM, A = Bitpos (3-Bit binär)
                                    
-                                ;call    c,setPixel  ; nur bei Abfrage von Y-max notwendig
-                                call    setPixel 
+                                ;call    c,getVRAMadr  ; nur bei Abfrage von Y-max notwendig
+                                call    getVRAMadr 
                                 
                                 ld      b,hi(sprite-1)          
                                 cpl
@@ -288,9 +288,10 @@ start:
                         
                         exx                             
                         
-                        ld      a,hi(buffer2_end)-1     ; 05,06, ... 0Dh
-                        cp      a,h                     ; 0Dh-0Eh -> CY, 
-                                                        ; buffer2_len = 0E00h-0500h = 900h                        
+                        ld      a,hi(buffer2_end)       ; 0Eh
+                        cp      a,h                     ; 0Eh-0Fh -> CY, 
+                                                        ; buffer2_len = 0E00h-0500h = 0900h  
+							; 900h = C000h-B700h -> s. test Bit 6 im Original Code
                 jp      nc,loop
                 
         jp      loop_ix
@@ -445,7 +446,7 @@ cls:
 
         if KC_TYPE == KC85_3
         
-setPixel:
+getVRAMadr:
         ld      h, a
 
         ld      a, c
@@ -522,7 +523,8 @@ bsend:
 
         if KC_TYPE == KC85_4
         
-setPixel:
+getVRAMadr:
+
         ld      l, a
         
         ; Pixelspalte / 8 = Zeichenspalte
@@ -551,7 +553,7 @@ setPixel:
 ; out: HL = VRAM, A = Bitpos (3 Bit binär)
 ;------------------------------------------------------------------------------
 
-setPixel_old:
+getVRAMadr_old:
 
         ld      b, a            
         ld      a, c
@@ -608,6 +610,7 @@ setColor:
         if KC_TYPE == KC85_4
 
 setColor:
+
         ld      a, (IX+1)        
         or      a, 00000010b    ; Farbebene ein
         out     (84h), a
@@ -630,8 +633,11 @@ setColor:
 
 initGleEst:
 
-        ld      bc, (buffer2_end-buffer2)/3
-        ld      hl, buffer2
+        ld      bc, (buffer2_end+200h-buffer2)/3 ; noch um 200h weiter 
+						 ; füllen mit dummy's, damit
+						 ; Schreiben auf 0 verhindert
+						 ; wird
+	ld      hl, buffer2				
         ld      de, dummy
 fb1:    ld      (hl), e
         inc     hl
@@ -658,10 +664,10 @@ dummy:  db      55h
 buffer1:        
         ds      100h
 buffer2:        
-        ds      900h
-buffer2_end:  
+        ds      0900h
+buffer2_end:  		; wird noch um 77h überschritten :-(
   
-        ds      100h
+        ds      200h	; zur Sicherheit
 stack:  
   
   
