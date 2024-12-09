@@ -288,8 +288,8 @@ start:
                         
                         exx                             
                         
-                        ld      a,hi(buffer2_end)       ; 0Eh
-                        cp      a,h                     ; 0Eh-0Fh -> CY, 
+                        ld      a,hi(buffer2_end)-1     ; 0Dh
+                        cp      a,h                     ; 0Dh-0Eh -> CY, 
                                                         ; buffer2_len = 0E00h-0500h = 0900h  
                                                         ; 900h = C000h-B700h -> s. test Bit 6 im Original Code
                 jp      nc,loop
@@ -633,7 +633,7 @@ setColor:
 
 initGleEst:
 
-        ld      bc, (buffer2_end+200h-buffer2)/3 ; noch um 200h weiter 
+        ld      bc, (buffer2_end+100h-buffer2)/3 ; noch um 100h weiter 
                                                  ; füllen mit dummy's, damit
                                                  ; Schreiben auf 0 verhindert
                                                  ; wird
@@ -667,7 +667,7 @@ buffer2:
         ds      0900h
 buffer2_end:            ; wird noch um 77h überschritten :-(
   
-        ds      200h    ; zur Sicherheit
+        ds      100h    ; zur Sicherheit
 stack:  
   
   
