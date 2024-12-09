@@ -22,7 +22,7 @@ Zum Assemblieren wurde der [Arnold-Assembler](http://john.ccac.rwth-aachen.de:80
 
 ### Vorausetzungen
 
-- KC85/4
+- KC85/4 oder KC85/5
 - oder [JKCEMU](http://www.jens-mueller.org/jkcemu/index.html)
 
 ### Schnellstart
