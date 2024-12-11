@@ -59,7 +59,7 @@ Auf Adresse 0200H laden, mit MENU / GLEEST3 starten, oder Autostart.
 
 ## Quellen
 
-Dieses Projekt nutzt Infos und Software aus den u.g. Quellen. Besonderer Dank geht an Mario Leubner für das herrvoragende KC85/5 Systemhandbuch, sowie an KaiOr und Crawler aus dem [Robotrontechnik-Forum](https://www.robotrontechnik.de/html/forum/thwb/index.php) für Tipps und Code-Optimierungen. 
+Dieses Projekt nutzt Infos und Software aus den u.g. Quellen. Besonderer Dank geht an Mario Leubner für das hervorragende KC85/5 Systemhandbuch, sowie an KaiOr und Crawler aus dem [Robotrontechnik-Forum](https://www.robotrontechnik.de/html/forum/thwb/index.php) für Tipps und Code-Optimierungen. 
 
 http://kc85.info/
 
