@@ -38,7 +38,7 @@ Auf Adresse 0200H laden, mit MENU / GLEEST4 starten, oder Autostart.
 <br>
 <br>
 
-## GleEst als Bildschirmschoner
+### GleEst als Bildschirmschoner
 
 Für den KC85/4 wurde GleEst auch als Bildschirmschoner unter CAOS implementiert:
 
