@@ -37,6 +37,13 @@ Zum Assemblieren wurde der [Arnold-Assembler](http://john.ccac.rwth-aachen.de:80
 Auf Adresse 0200H laden, mit MENU / GLEEST4 starten, oder Autostart.
 <br>
 <br>
+
+## GleEst als Bildschirmschoner
+
+Für den KC85/4 wurde GleEst auch als Bildschirmschoner unter CAOS implementiert:
+
+https://gitlab.com/stefan_koch/gleest-screensaver/
+
 ## GleEst für KC85/3
 
 ![Demo](/GleEst_KC85-3/Bilder/gleest_KC85-3.gif)
