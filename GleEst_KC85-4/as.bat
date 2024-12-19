@@ -18,7 +18,7 @@ if "%3" NEQ "" (
 echo -------- %file% -----------
 
 set bin=C:\Users\Heiko\Nextcloud\Privat\as\bin
-%bin%\asw.exe -L %asmfile%.asm -a "%option1%" 
+%bin%\asw.exe -L %asmfile%.asm -a "%option1%" "%option2%"
 %bin%\p2bin.exe -r $-$ "%asmfile%.p" "%binfile%"
 %bin%\plist.exe "%asmfile%.p" 
 
