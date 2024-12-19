@@ -28,7 +28,7 @@ Zum Assemblieren wurde der [Arnold-Assembler](http://john.ccac.rwth-aachen.de:80
 
 ### Vorausetzungen
 
-- KC85/1, Z9001 oder KC87 mit [KRT-Grafik](https://hc-ddr.hucki.net/wiki/doku.php/z9001/erweiterungen/krtgrafik)
+- KC85/1, Z9001 oder KC87 mit Farbkarte und [KRT-Grafik](https://hc-ddr.hucki.net/wiki/doku.php/z9001/erweiterungen/krtgrafik)
 - oder [JKCEMU](http://www.jens-mueller.org/jkcemu/index.html)
 
 ### Schnellstart
