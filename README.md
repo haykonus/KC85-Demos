@@ -18,6 +18,9 @@ Zum Assemblieren wurde der [Arnold-Assembler](http://john.ccac.rwth-aachen.de:80
 > [!TIP]
 > Das Programm kann mit Drücken einer beliebigen Taste beendet werden.
 
+<br>
+<br>
+
 ## GleEst für KC85/1
 
 ![Demo](/GleEst_KC85-1_KRT/Bilder/gleest_KC85-1_KRT.gif)
@@ -37,7 +40,8 @@ Zum Assemblieren wurde der [Arnold-Assembler](http://john.ccac.rwth-aachen.de:80
 
 Auf Adresse 0300H laden und mit GLEEST1 starten, oder Autostart.
 
-
+<br>
+<br>
 
 ## GleEst für KC85/4
 
