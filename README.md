@@ -97,7 +97,9 @@ Dieses Projekt nutzt Infos und Software aus den u.g. Quellen. Besonderer Dank ge
 
 http://kc85.info/
 
-https://www.sax.de/~zander/
+http://www.sax.de/~zander/z9001/ex/80z.html
+
+https://hc-ddr.hucki.net/wiki/doku.php/z9001/erweiterungen/krtgrafik
 
 http://www.mpm-kc85.de/html/D001BasisDevise.htm
 
