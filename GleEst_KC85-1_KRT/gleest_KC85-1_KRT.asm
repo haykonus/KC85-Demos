@@ -64,7 +64,11 @@ start:
                                 ld      a,(hl)          ;BWS-Block holen
                                 out     (GR_CTRL),a     ;BWS_Block setzen
                                 inc     hl
-                                                
+                                           
+                                ld      a, d            
+                                cp      0FFh            ;DE = Dummy-Adr ?
+                                jr      z, skip         ;js
+                                
                                 ld      a,(de)          ;BWS-Byte holen (t)     
                                 and     (hl)            ;mit BWS-Byte (t-1) kombinieren (Bits löschen)                                               
                                 ld      (de),a          ;BWS schreiben 
@@ -157,19 +161,21 @@ start:
                                 ; in:   AC = Y,X 
                                 ; out:  HL = VRAM, A = Bitpos (3-Bit binär)
                                         
-                                jr      nc, x1          ; innerhalb 0-191 ?
-                                call    c,getVRAMadr    ; ja
+                                jr      nc,x1           ; innerhalb 0-191 ?
+                                call    getVRAMadr      ; ja
                                 jr      x2
-                        x1:     ld      hl, 0FFFFh      ; nein -> HL = Dummy-Adr-
+                        x1:     
+                                ld      h, 0FFh         ; nein -> HL = Dummy-Adr
+                                jr      skip2
                         x2:     
                                 ld      b,hi(sprite-1)          
                                 cpl
                                 ld      c,a             
                                 ld      a,(bc)          ; BWS-Byte holen
-                                or      (hl)            ; Hintergrund und Pixel 
+                                or      (hl)            ; Hintergrund und Pixel         
                                 ld      (hl),a          ; BWS-Byte neu schreiben
                                 cpl
-      
+                        skip2:  
                                 push    hl
                                 
                                 exx
@@ -250,13 +256,13 @@ start:
                         
                                 ld      a, h
                                 cp      a, 0FFh         ; HL = Dummy-Adr ?
-                                jr      z, x3           ; Farbe nicht schreiben
+                                jr      z, skip3        ; Farbe nicht schreiben
                                 
                                 sub     4               ; Farb-RAM-Adresse bilden -> E8XX
                                 ld      h, a
                                 ld      a, (bc)         ; Farb-Attribut aus Palette holen
                                 ld      (hl), a         ; in Farb-RAM schreiben
-                        x3:
+                        skip3:
                 
         
                         dontplot:
@@ -266,7 +272,9 @@ start:
                                 
                                 inc     hl              
 
-                        djnz    d_loop
+                        dec     b
+                        jp      nz, d_loop      
+                        ;djnz    d_loop
 
                         add     hl,bc   
                         
