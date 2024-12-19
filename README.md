@@ -19,7 +19,6 @@ Zum Assemblieren wurde der [Arnold-Assembler](http://john.ccac.rwth-aachen.de:80
 > Das Programm kann mit Drücken einer beliebigen Taste beendet werden.
 
 <br>
-<br>
 
 ## GleEst für KC85/1
 
@@ -40,7 +39,6 @@ Zum Assemblieren wurde der [Arnold-Assembler](http://john.ccac.rwth-aachen.de:80
 
 Auf Adresse 0300H laden und mit GLEEST1 starten, oder Autostart.
 
-<br>
 <br>
 
 ## GleEst für KC85/4
@@ -70,7 +68,6 @@ Für den KC85/4 wurde GleEst auch als Bildschirmschoner unter CAOS implementiert
 https://gitlab.com/stefan_koch/gleest-screensaver/
 
 <br>
-<br>
 
 ## GleEst für KC85/3
 
@@ -91,6 +88,8 @@ https://gitlab.com/stefan_koch/gleest-screensaver/
 - [gleest_KC85-3_0200H.wav](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-3/gleest_KC85-3_0200H.wav)
 
 Auf Adresse 0200H laden, mit MENU / GLEEST3 starten, oder Autostart.
+
+<br>
 
 ## Quellen
 
