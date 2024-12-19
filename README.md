@@ -32,8 +32,8 @@ Zum Assemblieren wurde der [Arnold-Assembler](http://john.ccac.rwth-aachen.de:80
 > [!CAUTION]
 > Die Links unten anklicken und danach den Download-Button (Download raw file) im Github klicken, um die Datei zu laden.
 
-- [gleest_KC85-1_KRT_0200H.bin](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-1_KRT/gleest_KC85-1_KRT_0200H.bin)
-- [gleest_KC85-1_KRT_0200H.kcc](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-1_KRT/gleest_KC85-1_KRT_0300H.kcc)
+- [gleest_KC85-1_KRT_0300H.bin](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-1_KRT/gleest_KC85-1_KRT_0300H.bin)
+- [gleest_KC85-1_KRT_0300H.kcc](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-1_KRT/gleest_KC85-1_KRT_0300H.kcc)
 
 Auf Adresse 0300H laden und mit GLEEST1 starten, oder Autostart.
 
