@@ -4,7 +4,9 @@
 
 [GleEst für KC85/1 KRT](https://github.com/haykonus/KC85-Demos/blob/main/README.md#gleest-f%C3%BCr-kc851)
 
-[GleEst für KC85/3/4](https://github.com/haykonus/KC85-Demos/blob/main/README.md#gleest-f%C3%BCr-kc8534)
+[GleEst für KC85/3](https://github.com/haykonus/KC85-Demos/blob/main/README.md#gleest-f%C3%BCr-kc853)
+
+[GleEst für KC85/4](https://github.com/haykonus/KC85-Demos/blob/main/README.md#gleest-f%C3%BCr-kc854)
 
 
 # GleEst für KC85/1/3/4
@@ -18,13 +20,15 @@ Zum Assemblieren wurde der [Arnold-Assembler](http://john.ccac.rwth-aachen.de:80
 > [!TIP]
 > Das Programm kann mit Drücken einer beliebigen Taste beendet werden.
 
+<br>
+
 ## GleEst für KC85/1
 
 ![Demo](/GleEst_KC85-1_KRT/Bilder/gleest_KC85-1_KRT.gif)
 
 ### Vorausetzungen
 
-- KC85/1, Z9001 oder KC87 mit [KRT-Grafik](https://hc-ddr.hucki.net/wiki/doku.php/z9001/erweiterungen/krtgrafik)
+- KC85/1, Z9001 oder KC87 mit Farbkarte und [KRT-Grafik](https://hc-ddr.hucki.net/wiki/doku.php/z9001/erweiterungen/krtgrafik)
 - oder [JKCEMU](http://www.jens-mueller.org/jkcemu/index.html)
 
 ### Schnellstart
@@ -32,12 +36,12 @@ Zum Assemblieren wurde der [Arnold-Assembler](http://john.ccac.rwth-aachen.de:80
 > [!CAUTION]
 > Die Links unten anklicken und danach den Download-Button (Download raw file) im Github klicken, um die Datei zu laden.
 
-- [gleest_KC85-1_KRT_0200H.bin](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-1_KRT/gleest_KC85-1_KRT_0200H.bin)
-- [gleest_KC85-1_KRT_0200H.kcc](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-1_KRT/gleest_KC85-1_KRT_0300H.kcc)
+- [gleest_KC85-1_KRT_0300H.bin](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-1_KRT/gleest_KC85-1_KRT_0300H.bin)
+- [gleest_KC85-1_KRT_0300H.kcc](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-1_KRT/gleest_KC85-1_KRT_0300H.kcc)
 
 Auf Adresse 0300H laden und mit GLEEST1 starten, oder Autostart.
 
-
+<br>
 
 ## GleEst für KC85/4
 
@@ -66,7 +70,6 @@ Für den KC85/4 wurde GleEst auch als Bildschirmschoner unter CAOS implementiert
 https://gitlab.com/stefan_koch/gleest-screensaver/
 
 <br>
-<br>
 
 ## GleEst für KC85/3
 
@@ -88,13 +91,17 @@ https://gitlab.com/stefan_koch/gleest-screensaver/
 
 Auf Adresse 0200H laden, mit MENU / GLEEST3 starten, oder Autostart.
 
+<br>
+
 ## Quellen
 
 Dieses Projekt nutzt Infos und Software aus den u.g. Quellen. Besonderer Dank geht an Mario Leubner für das hervorragende KC85/5 Systemhandbuch, sowie an KaiOr und Crawler aus dem [Robotrontechnik-Forum](https://www.robotrontechnik.de/html/forum/thwb/index.php) für Tipps und Code-Optimierungen. 
 
 http://kc85.info/
 
-https://www.sax.de/~zander/
+http://www.sax.de/~zander/z9001/ex/80z.html
+
+https://hc-ddr.hucki.net/wiki/doku.php/z9001/erweiterungen/krtgrafik
 
 http://www.mpm-kc85.de/html/D001BasisDevise.htm
 
