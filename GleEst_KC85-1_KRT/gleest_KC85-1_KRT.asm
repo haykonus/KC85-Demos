@@ -306,7 +306,7 @@ start:
                         
                         exx                             
                         
-                        ld      a,hi(buffer2_end)-1
+                        ld      a,hi(buffer2_end)-2
                         cp      a,h
                         
                 jp      nc,loop

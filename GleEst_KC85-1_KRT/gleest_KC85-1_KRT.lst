@@ -1,0 +1,650 @@
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-1_KRT.asm - Page 1 - 12/20/2024 7:44:32
+
+
+       1/       0 :                     ;------------------------------------------------------------------------------
+       2/       0 :                     ; Titel:                GleEst für Z9001 (KC85/1, KC87) KRT
+       3/       0 :                     ;
+       4/       0 :                     ; Erstellt:             20.11.2024
+       5/       0 :                     ; Letzte Änderung:      19.12.2024
+       6/       0 :                     ;------------------------------------------------------------------------------ 
+       7/       0 :                     
+       8/       0 :                             cpu     z80
+       9/       0 :                     
+      10/       0 :                     hi      function x,(x>>8)&255
+      11/       0 :                     lo      function x, x&255
+      12/       0 :                     
+      13/       0 : =>DEFINED                    ifndef  BASE
+      14/       0 :                                     BASE:   set     0300H   
+      15/       0 : [13]                         endif   
+      16/     300 :                                     org     BASE
+      17/     300 :                                     
+      18/     300 : C3 0C 03                    jp      start
+      19/     303 : 47 4C 45 45 53 54           db      'GLEEST1 '
+              309 : 31 20             
+      20/     30B : 00                          db      0
+      21/     30C :                                    
+      22/     30C :                     start:          
+      23/     30C : CD 0A 04                    call    cls             ; Bildschirm löschen
+      24/     30F : CD 77 04                    call    initGleEst
+      25/     312 :                             
+      26/     312 :                     ;------------------------------------------------------------------------------
+      27/     312 :                             
+      28/     312 :                             ; Start GleEst
+      29/     312 :                             
+      30/     312 : 21 01 00                    ld      hl, 0001h       ; (stack) darf nicht 0 sein
+      31/     315 : E5                          push    hl
+      32/     316 :                             
+      33/     316 : 21 00 05                    ld      hl, buffer1
+      34/     319 :                             
+      35/     319 : D9                          exx
+      36/     31A :                     
+      37/     31A :                             loop_ix:
+      38/     31A :                             
+      39/     31A : 3A 25 00                            ld      a, (0025h)      ; KEYBU abfragen
+      40/     31D : FE 00                               cp      a, 0            ; 0 = nicht gedrückt
+      41/     31F :                     		;jr	noKey
+      42/     31F : 28 09                               jr      z, noKey        ; weiter
+      43/     321 :                                     
+      44/     321 : CD 0A 04                            call    cls
+      45/     324 : CD 06 04                            call    gOff            ; Grafik aus
+      46/     327 : C3 03 F0                            jp      0F003h          ; BIOS -> WBOOT
+      47/     32A :                     
+      48/     32A : 21 00 06                    noKey:  ld      hl, buffer2
+      49/     32D :                             
+      50/     32D :                                     loop:   
+      51/     32D :                                             ;ld     bc,10FFh        ; nur wenige Punkte (für Test)
+      52/     32D : 01 06 3F                                    ld      bc,3F06h        ; BH = Abstand Punkte, BL = Anzahl Punkte 
+      53/     330 :                                             
+      54/     330 :                                             d_loop:
+      55/     330 :                                                     ;
+      56/     330 :                                                     ; Pixel löschen
+      57/     330 :                                                     ;
+      58/     330 :                                                     
+      59/     330 : 5E                                                  ld      e,(hl)          ;BWS lo holen
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-1_KRT.asm - Page 2 - 12/20/2024 7:44:32
+
+
+      60/     331 : 23                                                  inc     hl
+      61/     332 :                                                     
+      62/     332 : 56                                                  ld      d,(hl)          ;BWS hi holen
+      63/     333 : 23                                                  inc     hl
+      64/     334 :                                                     
+      65/     334 : 7E                                                  ld      a,(hl)          ;BWS-Block holen
+      66/     335 : D3 B8                                               out     (GR_CTRL),a     ;BWS_Block setzen
+      67/     337 : 23                                                  inc     hl
+      68/     338 :                                                                
+      69/     338 : 7A                                                  ld      a, d            
+      70/     339 : FE FF                                               cp      0FFh            ;DE = Dummy-Adr ?
+      71/     33B : 28 03                                               jr      z, skip         ;js
+      72/     33D :                                                     
+      73/     33D : 1A                                                  ld      a,(de)          ;BWS-Byte holen (t)     
+      74/     33E : A6                                                  and     (hl)            ;mit BWS-Byte (t-1) kombinieren (Bits löschen)                                               
+      75/     33F : 12                                                  ld      (de),a          ;BWS schreiben 
+      76/     340 :                                             skip:            
+      77/     340 : D9                                                  exx                     
+      78/     341 :                                                     
+      79/     341 : 7D                                                  proc:   ld      a,L
+      80/     342 :                                                     
+      81/     342 : 5E                                                          ld      e,(hl)   
+      82/     343 : 2C                                                          inc     l
+      83/     344 :                                                             
+      84/     344 : 56                                                          ld      d,(hl) 
+      85/     345 : 2C                                                          inc     l
+      86/     346 :                                                             
+      87/     346 : 2C                                                          inc     l
+      88/     347 : 2C                                                          inc     l
+      89/     348 :                                                             
+      90/     348 : 4E                                                          ld      c,(hl)  
+      91/     349 : 2C                                                          inc     l
+      92/     34A :                                                             
+      93/     34A : 46                                                          ld      b,(hl)
+      94/     34B : EB                                                          ex      de,hl
+      95/     34C : 09                                                          add     hl,bc
+      96/     34D : EB                                                          ex      de,hl
+      97/     34E : CB 3A                                                       srl     d
+      98/     350 : CB 1B                                                       rr      e
+      99/     352 : 6F                                                          ld      L,a
+     100/     353 :                                                             
+     101/     353 : 73                                                          ld      (hl),e
+     102/     354 : 2C                                                          inc     l
+     103/     355 :                                                             
+     104/     355 : 72                                                          ld      (hl),d
+     105/     356 : 2C                                                          inc     l
+     106/     357 :                                                             
+     107/     357 : D5                                                          push    de
+     108/     358 : E6 02                                                       and     2       
+     109/     35A :                                                             
+     110/     35A : 28 E5                                               jr      z, proc
+     111/     35C :                     
+     112/     35C : C1                                                  pop     bc
+     113/     35D : E3                                                  ex      (sp),hl
+     114/     35E :                                                     
+     115/     35E : D9                                                  exx
+     116/     35F :                                                     
+     117/     35F : 78                                                  ld      a,b
+     118/     360 :                                                     
+     119/     360 : D9                                                  exx
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-1_KRT.asm - Page 3 - 12/20/2024 7:44:32
+
+
+     120/     361 :                                                     
+     121/     361 : FE 10                                               cp      10h
+     122/     363 : 38 4A                                               jr      c,dontplot
+     123/     365 :                                                     
+     124/     365 : 01 40 FD                                            ld      bc,0fd40h
+     125/     368 : 09                                                  add     hl,bc
+     126/     369 : CB 3C                                               srl     h
+     127/     36B : 20 42                                               jr      nz,dontplot
+     128/     36D :                                                     
+     129/     36D : CB 1D                                               rr      l
+     130/     36F : 4D                                                  ld      c,L
+     131/     370 : 7A                                                  ld      a,d
+     132/     371 : 80                                                  add     a,b
+     133/     372 : CB 3F                                               srl     a
+     134/     374 : 20 39                                               jr      nz,dontplot
+     135/     376 :                                                     
+     136/     376 :                                             plot:
+     137/     376 : 7B                                                  ld      a,e
+     138/     377 : 1F                                                  rra
+     139/     378 : FE C0                                               cp      0C0h            ; Y max  
+     140/     37A :                                                                                
+     141/     37A :                                                     ;
+     142/     37A :                                                     ; Pixel schreiben
+     143/     37A :                                                     ;
+     144/     37A :                                                     
+     145/     37A :                                                     ;-------------------------------
+     146/     37A :                                                     ; ZX Spectrum 
+     147/     37A :                                                     ;-------------------------------                                
+     148/     37A :                     
+     149/     37A :                                                     ; THE 'PIXEL ADDRESS' SUBROUTINE (22AAh)
+     150/     37A :                                                     ; This subroutine is called by the POINT subroutine and by the PLOT command routine. 
+     151/     37A :                                                     ; Is is entered with the co-ordinates of a pixel in the BC register pair and returns 
+     152/     37A :                                                     ; with HL holding the address of the display file byte which contains that pixel 
+     153/     37A :                                                     ; and A pointing to the position of the pixel within the byte.
+     154/     37A :                                     
+     155/     37A :                                                     ;call   c,22b0h         -> Spectrum ROM       in: co-ordinates of a pixel in the AC
+     156/     37A :                     
+     157/     37A :                                                     ;-------------------------------
+     158/     37A :                                                     ; KC85/1
+     159/     37A :                                                     ;-------------------------------                                
+     160/     37A :                                                     
+     161/     37A :                                                     ; getVRAMadr
+     162/     37A :                                                     ; in:   AC = Y,X 
+     163/     37A :                                                     ; out:  HL = VRAM, A = Bitpos (3-Bit binär)
+     164/     37A :                                                             
+     165/     37A : 30 05                                               jr      nc,x1           ; innerhalb 0-191 ?
+     166/     37C : DC 37 04                                            call    c, getVRAMadr      ; ja
+     167/     37F : 18 04                                               jr      x2
+     168/     381 :                                             x1:     
+     169/     381 : 26 FF                                               ld      h, 0FFh         ; nein -> HL = Dummy-Adr
+     170/     383 : 18 08                                               jr      skip2
+     171/     385 :                                             x2:     
+     172/     385 : 06 03                                               ld      b,hi(sprite-1)          
+     173/     387 : 2F                                                  cpl
+     174/     388 : 4F                                                  ld      c,a             
+     175/     389 : 0A                                                  ld      a,(bc)          ; BWS-Byte holen
+     176/     38A : B6                                                  or      (hl)            ; Hintergrund und Pixel         
+     177/     38B : 77                                                  ld      (hl),a          ; BWS-Byte neu schreiben
+     178/     38C : 2F                                                  cpl
+     179/     38D :                                             skip2:  
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-1_KRT.asm - Page 4 - 12/20/2024 7:44:32
+
+
+     180/     38D : E5                                                  push    hl
+     181/     38E :                                                     
+     182/     38E : D9                                                  exx
+     183/     38F :                                                     
+     184/     38F : D1                                                  pop     de              
+     185/     390 :                                        
+     186/     390 : 77                                                  ld      (hl),a          ; BWS-Byte merken
+     187/     391 : 2B                                                  dec     hl
+     188/     392 :                                                             
+     189/     392 : 3A 00 04                                            ld      a,(LAST_GR_CTRL); BWS-Block holen
+     190/     395 : 77                                                  ld      (hl),a          ; BWS-Block merken
+     191/     396 : 2B                                                  dec     hl
+     192/     397 :                                                     
+     193/     397 : 72                                                  ld      (hl),d          ; BWS hi merken
+     194/     398 : 2B                                                  dec     hl
+     195/     399 :                                                     
+     196/     399 : 73                                                  ld      (hl),e          ; BWS lo merken
+     197/     39A : 23                                                  inc     hl                      
+     198/     39B : 23                                                  inc     hl
+     199/     39C : 23                                                  inc     hl              
+     200/     39D : 78                                                  ld      a,b
+     201/     39E :                                                     
+     202/     39E : D9                                                  exx
+     203/     39F :                             
+     204/     39F : 0F                                                  rrca    
+     205/     3A0 : 0F                                                  rrca    
+     206/     3A1 : 0F                                                  rrca
+     207/     3A2 : F6 F0                                               or      11110000b
+     208/     3A4 :                                                     
+     209/     3A4 : 4F                                                  ld      c,a     
+     210/     3A5 :                             
+     211/     3A5 :                                                     ;
+     212/     3A5 :                                                     ; Farb-Attribut setzen
+     213/     3A5 :                                                     ;
+     214/     3A5 :                                                     
+     215/     3A5 :                                                     ;-------------------------------
+     216/     3A5 :                                                     ; ZX Spectrum 
+     217/     3A5 :                                                     ;-------------------------------
+     218/     3A5 :                                                     
+     219/     3A5 :                                                     ;ld     a,(bc)                  A = Farb-Attribut
+     220/     3A5 :                                                     
+     221/     3A5 :                                                     ; Paper-Attribute ZX-Spectrum
+     222/     3A5 :                                                     ;
+     223/     3A5 :                                                     ; 7  6  5  4  3   2  1  0       Bit
+     224/     3A5 :                                                     ;       G  R  B   G  R  B       Color   G=green, R=red, B=blue  
+     225/     3A5 :                                                     ; F  H  P2 P1 P0  I2 I1 I0      Function
+     226/     3A5 :                     
+     227/     3A5 :                                                     ; Where:
+     228/     3A5 :                     
+     229/     3A5 :                                                     ; F sets the attribute FLASH mode
+     230/     3A5 :                                                     ; H sets the attribute BRIGHTNESS mode
+     231/     3A5 :                                                     ; P2 to P0 is the PAPER colour
+     232/     3A5 :                                                     ; I2 to I0 is the INK colour
+     233/     3A5 :                     
+     234/     3A5 :                                                     ;ld     (23695),a       ; ATTR_T = 5C8Fh ; aktuelle Farben temporaer
+     235/     3A5 :                                                     
+     236/     3A5 :                                                     
+     237/     3A5 :                                                     ; THE 'SET ATTRIBUTE BYTE' SUBROUTINE
+     238/     3A5 :                                                     ; The appropriate attribute byte is identified and fetched. 
+     239/     3A5 :                                                     ; The new value is formed by manipulating the old value, ATTR-T, MASK-T and
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-1_KRT.asm - Page 5 - 12/20/2024 7:44:32
+
+
+     240/     3A5 :                                                     ; P-FLAG. Finally this new value is copied to the attribute area.
+     241/     3A5 :                                                     
+     242/     3A5 :                                                     ;call   0BDBh   -> Spectrum ROM
+     243/     3A5 :                                                     
+     244/     3A5 :                     
+     245/     3A5 :                                                     ;----------------------------------------
+     246/     3A5 :                                                     ; KC85/1
+     247/     3A5 :                                                     ;----------------------------------------
+     248/     3A5 :                                                     ; 7  6  5  4  3  2  1  0      Bit
+     249/     3A5 :                                                     ;    B  G  R     B  G  R      Farbe
+     250/     3A5 :                                                     ; F  I2 I1 I0    P2 P1 P0     Funktion 
+     251/     3A5 :                     
+     252/     3A5 :                                                     ; F=blinken
+     253/     3A5 :                                                     ; H=hell, G=grün, R=rot, B=blau
+     254/     3A5 :                                                     ; P2-P0   = Hintergrundfarbe 
+     255/     3A5 :                                                     ; I2-I0   = Vordergrundfarbe
+     256/     3A5 :                                                     
+     257/     3A5 :                                             
+     258/     3A5 : 7C                                                  ld      a, h
+     259/     3A6 : FE FF                                               cp      a, 0FFh         ; HL = Dummy-Adr ?
+     260/     3A8 : 28 05                                               jr      z, skip3        ; Farbe nicht schreiben
+     261/     3AA :                                                     
+     262/     3AA : D6 04                                               sub     4               ; Farb-RAM-Adresse bilden -> E8XX
+     263/     3AC : 67                                                  ld      h, a
+     264/     3AD : 0A                                                  ld      a, (bc)         ; Farb-Attribut aus Palette holen
+     265/     3AE : 77                                                  ld      (hl), a         ; in Farb-RAM schreiben
+     266/     3AF :                                             skip3:
+     267/     3AF :                                     
+     268/     3AF :                             
+     269/     3AF :                                             dontplot:
+     270/     3AF : E1                                                  pop     hl              
+     271/     3B0 :                                                     
+     272/     3B0 : D9                                                  exx
+     273/     3B1 :                                                     
+     274/     3B1 : 23                                                  inc     hl              
+     275/     3B2 :                     
+     276/     3B2 : 05                                          dec     b
+     277/     3B3 : C2 30 03                                    jp      nz, d_loop      
+     278/     3B6 :                                             ;djnz    d_loop
+     279/     3B6 :                     
+     280/     3B6 : 09                                          add     hl,bc   
+     281/     3B7 :                                             
+     282/     3B7 : D9                                          exx                     
+     283/     3B8 :                                             
+     284/     3B8 :                                             random:
+     285/     3B8 : D1                                                  pop     de
+     286/     3B9 : 06 10                                               ld      b,10h
+     287/     3BB :                                                     
+     288/     3BB : CB 23                                               backw:  sla     e
+     289/     3BD : CB 12                                                       rl      d
+     290/     3BF : 7A                                                          ld      a,d
+     291/     3C0 : E6 C0                                                       and     0c0h    
+     292/     3C2 : EA C6 03                                                    jp      pe,forw
+     293/     3C5 : 1C                                                          inc     e
+     294/     3C6 :                                                             
+     295/     3C6 : 10 F3                                       forw:   djnz    backw
+     296/     3C8 :                                             
+     297/     3C8 : 7A                                                  ld      a,d
+     298/     3C9 : D5                                                  push    de
+     299/     3CA : 1F                                                  rra
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-1_KRT.asm - Page 6 - 12/20/2024 7:44:32
+
+
+     300/     3CB : CB 18                                               rr      b
+     301/     3CD : E6 07                                               and     07h
+     302/     3CF : 70                                                  ld      (hl),b   
+     303/     3D0 : 2C                                                  inc     l
+     304/     3D1 : 77                                                  ld      (hl),a  
+     305/     3D2 : 2C                                                  inc     l
+     306/     3D3 : 20 E3                                       jr      nz,random
+     307/     3D5 :                                             
+     308/     3D5 : D9                                          exx                             
+     309/     3D6 :                                             
+     310/     3D6 : 3E 0E                                       ld      a,hi(buffer2_end)-2
+     311/     3D8 : BC                                          cp      a,h
+     312/     3D9 :                                             
+     313/     3D9 : D2 2D 03                            jp      nc,loop
+     314/     3DC :                                     
+     315/     3DC : C3 1A 03                    jp      loop_ix
+     316/     3DF :                             
+     317/     3DF :                     ;------------------------------------------------------------------------------
+     318/     3DF :                     
+     319/     3F2 :                             org     BASE+0F8h-6
+     320/     3F2 :                     
+     321/     3F2 :                     palette:
+     322/     3F2 :                     
+     323/     3F2 :                             ; F=blinken
+     324/     3F2 :                             ; H=hell, G=grün, R=rot, B=blau
+     325/     3F2 :                             ; P2-P0   = Hintergrundfarbe 
+     326/     3F2 :                             ; I2-I0   = Vordergrundfarbe
+     327/     3F2 :                             
+     328/     3F2 : =>FALSE                      if 0 = 1
+     329/     3F2 :                             ;----------------------------------------
+     330/     3F2 :                             ; ZX Spectrum 
+     331/     3F2 :                             ;----------------------------------------       
+     332/     3F2 :                             ; 7  6  5  4  3   2  1  0       Bit
+     333/     3F2 :                             ;       G  R  B   G  R  B       Farbe   
+     334/     3F2 :                             ; F  H  P2 P1 P0  I2 I1 I0      Funktion
+     335/     3F2 :                                                     
+     336/     3F2 :                             db      45h             ; HGB
+     337/     3F2 :                                     ;01 000 101
+     338/     3F2 :                             
+     339/     3F2 :                             db      44h             ; HG
+     340/     3F2 :                                     ;01 000 100
+     341/     3F2 :                             
+     342/     3F2 :                             db      06h             ; GR
+     343/     3F2 :                                     ;00 000 110
+     344/     3F2 :                             
+     345/     3F2 :                             db      42h             ; HR
+     346/     3F2 :                                     ;01 000 010
+     347/     3F2 :                     
+     348/     3F2 :                             db      03h             ; RB
+     349/     3F2 :                                     ;00 000 011
+     350/     3F2 :                     
+     351/     3F2 :                             db      01h             ; B
+     352/     3F2 :                                     ;00 000 001
+     353/     3F2 : [328]                        endif
+     354/     3F2 :                     
+     355/     3F2 :                             ;----------------------------------------
+     356/     3F2 :                             ; KC85/1
+     357/     3F2 :                             ;----------------------------------------
+     358/     3F2 :                             ; 7  6  5  4  3  2  1  0      Bit
+     359/     3F2 :                             ;    B  G  R     B  G  R      Farbe
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-1_KRT.asm - Page 7 - 12/20/2024 7:44:32
+
+
+     360/     3F2 :                             ; F  I2 I1 I0    P2 P1 P0     Funktion           
+     361/     3F2 :                             
+     362/     3F2 : 60                          db      01100000b       ; GB    
+     363/     3F3 : 20                          db      00100000b       ; G
+     364/     3F4 : 30                          db      00110000b       ; GR
+     365/     3F5 : 10                          db      00010000b       ; R
+     366/     3F6 : 50                          db      01010000b       ; RB    
+     367/     3F7 : 40                          db      01000000b       ;
+     368/     3F8 :                             
+     369/     3F8 : 01                          db      00000001b
+     370/     3F9 : 02                          db      00000010b
+     371/     3FA : 04                          db      00000100b
+     372/     3FB : 08                          db      00001000b
+     373/     3FC : 10                          db      00010000b
+     374/     3FD : 20                          db      00100000b
+     375/     3FE : 40                          db      01000000b
+     376/     3FF : 80                          db      10000000b
+     377/     400 :                             
+     378/     400 :                     sprite:
+     379/     400 :                     
+     380/     400 :                             
+     381/     400 :                     ;------------------------------------------------------------------------------
+     382/     400 :                     ; KC85/1 Grafik-Routinen
+     383/     400 :                     ;
+     384/     400 :                     ; aus "grafp.asm" übernommen und angepasst
+     385/     400 :                     ; https://hc-ddr.hucki.net/wiki/lib/exe/fetch.php/z9001/grafik-krt.zip
+     386/     400 :                     ;
+     387/     400 :                     ;------------------------------------------------------------------------------
+     388/     400 :                     
+     389/     400 : =0B8H                GR_CTRL         equ     0B8h    ; Farbe + Grafik ein/aus
+     390/     400 :                                                     ; 7 6 5 4 3 2 1 0
+     391/     400 :                                                     ;         | | | |
+     392/     400 :                                                     ;         | --|--
+     393/     400 :                                                     ;         |   Zeichen-Zeile 
+     394/     400 :                                                     ;         Grafik ein/aus
+     395/     400 :                                                     
+     396/     400 : 00                  LAST_GR_CTRL    db      0                               
+     397/     401 :                                                             
+     398/     401 :                     ;------------------------------------------------------------------------------
+     399/     401 :                     ; KC85/1
+     400/     401 :                     ; Grafik einschalten
+     401/     401 :                     ;------------------------------------------------------------------------------
+     402/     401 :                     
+     403/     401 :                     gOn:   
+     404/     401 : 3E 08                       ld      a, 00001000b    ; Grafikmode einschalten und Bank 0 einblenden
+     405/     403 : D3 B8                       out     (GR_CTRL),a
+     406/     405 : C9                          ret
+     407/     406 :                                     
+     408/     406 :                     ;------------------------------------------------------------------------------
+     409/     406 :                     ; KC85/1
+     410/     406 :                     ; Grafik ausschalten
+     411/     406 :                     ;------------------------------------------------------------------------------
+     412/     406 :                     
+     413/     406 :                     gOff:
+     414/     406 : AF                          xor     a               ; Grafikmode ausschalten
+     415/     407 : D3 B8                       out     (GR_CTRL),a
+     416/     409 : C9                          ret
+     417/     40A :                     
+     418/     40A :                     ;------------------------------------------------------------------------------
+     419/     40A :                     ; KC85/1
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-1_KRT.asm - Page 8 - 12/20/2024 7:44:32
+
+
+     420/     40A :                     ; Löscht Pixel/Farb-RAM
+     421/     40A :                     ;------------------------------------------------------------------------------
+     422/     40A :                     
+     423/     40A :                     cls:
+     424/     40A : 06 08                       ld      b, 8
+     425/     40C : 3E 08                       ld      a, 00001000b    ; Grafikmode einschalten und Bank 0 einblenden
+     426/     40E :                     cls1:
+     427/     40E : D3 B8                       out     (GR_CTRL),a
+     428/     410 : F5                          push    af
+     429/     411 : C5                          push    bc
+     430/     412 : 21 00 EC                    ld      hl, 0EC00h
+     431/     415 : 11 01 EC                    ld      de, 0EC01h
+     432/     418 : 01 C0 03                    ld      bc, 960
+     433/     41B : 36 00                       ld      (hl),0
+     434/     41D : ED B0                       ldir
+     435/     41F : C1                          pop     bc
+     436/     420 : F1                          pop     af
+     437/     421 : 3C                          inc     a
+     438/     422 : 10 EA                       djnz    cls1
+     439/     424 :                     
+     440/     424 : 3A 27 00                    ld      a, (0027h)      ; ATRIB aktuelles Farbattribut
+     441/     427 : 21 00 E8                    ld      hl, 0E800h
+     442/     42A : 11 01 E8                    ld      de, 0E801h
+     443/     42D : 01 C0 03                    ld      bc, 960
+     444/     430 : 77                          ld      (hl),a
+     445/     431 : ED B0                       ldir
+     446/     433 :                             
+     447/     433 : AF                          xor     a               ; Grafikmode ausschalten
+     448/     434 : D3 B8                       out     (GR_CTRL),a     
+     449/     436 : C9                          ret
+     450/     437 :                             
+     451/     437 :                     ;------------------------------------------------------------------------------
+     452/     437 :                     ; KC85/1
+     453/     437 :                     ; in:  AC = Y,X (Pixelzeile, Pixelspalte)
+     454/     437 :                     ; out: HL = VRAM (Pixel), A = Bitpos (3 Bit binär)
+     455/     437 :                     ;------------------------------------------------------------------------------ 
+     456/     437 :                     
+     457/     437 :                     getVRAMadr:
+     458/     437 : 5F                          ld      e, a    ; DE = Y
+     459/     438 : 06 00                       ld      b, 0    ; BC = X
+     460/     43A :                     
+     461/     43A : 60                          ld      h, b    ; BC = BC + 32 -> Bild mittig
+     462/     43B : 69                          ld      l, c
+     463/     43C : 01 20 00                    ld      bc, 0020h
+     464/     43F : 09                          add     hl, bc
+     465/     440 : 44                          ld      b, h
+     466/     441 : 4D                          ld      c, l    
+     467/     442 :                             
+     468/     442 :                             ; Umrechnung BC (X), DE (Y) zu VRAM-Adr
+     469/     442 :                             
+     470/     442 : 79                          ld      a, c
+     471/     443 : E6 07                       and     7               ; unteren 3 Bit maskieren
+     472/     445 : F5                          push    af              ; Bitpos merken
+     473/     446 :                             
+     474/     446 : 51                          ld      d, c            ; de ist max 192, d.h. d ist immer 0    
+     475/     447 :                                     
+     476/     447 :                             ; Umrechnung BC (D)-xpos Spalte , E-ypos Zeile zu g_memptr
+     477/     447 :                     
+     478/     447 : 3E 07                       ld      a, 7            ; BWS-Bank = Zeile mod 8
+     479/     449 : 93                          sub     e
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-1_KRT.asm - Page 9 - 12/20/2024 7:44:32
+
+
+     480/     44A : E6 07                       and     7
+     481/     44C : F6 08                       or      00001000b
+     482/     44E : D3 B8                       out  (GR_CTRL),a        ; BWS-Bank einschalten
+     483/     450 : 32 00 04                    ld   (LAST_GR_CTRL),a   ; ... und merken
+     484/     453 :                     
+     485/     453 :                             ; VRAM-Adr = letzte BWS-Zeile - 40*(Zeile/8) + (Spalte/8)
+     486/     453 :                             ;          = letzte BWS-Zeile - 5*Zeile + (Spalte/8)
+     487/     453 :                     
+     488/     453 : 4A                          ld      c, d
+     489/     454 : C5                          push    bc
+     490/     455 : 7B                          ld      a, e
+     491/     456 : E6 F8                       and     11111000b
+     492/     458 : 5F                          ld      e,a
+     493/     459 : 16 00                       ld      d, 0
+     494/     45B : 62                          ld      h, d
+     495/     45C : 6B                          ld      l, e            ;HL := DE
+     496/     45D : 29                          add     hl, hl          ;*2
+     497/     45E : 29                          add     hl, hl          ;*4
+     498/     45F : 19                          add     hl, de          ;*5
+     499/     460 : 11 98 EF                    ld      de, 0EC00h+40*(24-1)    ; Anf.Adr. unterste Zeile
+     500/     463 : EB                          ex      de,hl
+     501/     464 : AF                          xor     a
+     502/     465 : ED 52                       sbc     hl,de           ;letzte BWS-Zeile - 5*Zeile
+     503/     467 : C1                          pop     bc
+     504/     468 :                     
+     505/     468 : CB 38                       srl     b               ;bc/8
+     506/     46A : CB 19                       rr      c
+     507/     46C : CB 38                       srl     b
+     508/     46E : CB 19                       rr      c
+     509/     470 : CB 38                       srl     b
+     510/     472 : CB 19                       rr      c
+     511/     474 :                     
+     512/     474 : 09                          add     hl, bc          ; Spaltenoffset addieren
+     513/     475 : F1                          pop     af              ; A = Bitpos
+     514/     476 : C9                          ret
+     515/     477 :                     
+     516/     477 :                     ;----------------------------------------------------------------------------
+     517/     477 :                     ; buffer2 wird mit 0FFh initialisiert, damit keine undefinierten 
+     518/     477 :                     ; Schreibvorgänge im RAM erfolgen können.
+     519/     477 :                     ;------------------------------------------------------------------------------
+     520/     477 :                     
+     521/     477 :                     initGleEst:
+     522/     477 :                     
+     523/     477 : 01 00 0A                    ld      bc, buffer2_end - buffer2       ; füllen mit dummy's, damit
+     524/     47A :                                                                     ; Schreiben auf FFFFh umgelenkt
+     525/     47A :                                                                     ; und dann verhindert wird                      
+     526/     47A : 21 00 06                    ld      hl, buffer2                              
+     527/     47D : 36 FF               fb1:    ld      (hl), 0FFh
+     528/     47F : 23                          inc     hl
+     529/     480 : 0B                          dec     bc
+     530/     481 : 78                          ld      a, b
+     531/     482 : B1                          or      c
+     532/     483 : 20 F8                       jr      nz, fb1
+     533/     485 : C9                          ret
+     534/     486 :                             
+     535/     486 :                     end     
+     536/     486 :                     
+     537/     486 :                     
+     538/     486 :                     ;------------------------------------------------------------------------------
+     539/     486 :                     
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-1_KRT.asm - Page 10 - 12/20/2024 7:44:32
+
+
+     540/     486 :                             ; RAM für GleEst
+     541/     486 :                             
+     542/     486 :                             align   0100h
+     543/     500 :                             
+     544/     500 :                     buffer1:        
+     545/     500 :                             ds      0100h
+     546/     600 :                     buffer2:        
+     547/     600 :                             ds      0A00h   ; 900h + 100h (Abfangen von Schreibzugriffen)
+     548/    1000 :                     buffer2_end:  
+     549/    1000 :                     
+     550/    1000 :                     
+     551/    1000 :                             
+     552/    1000 :                     
+     553/    1000 :                             
+     554/    1000 :                             
+     555/    1000 :                     
+     556/    1000 :                     
+     557/    1000 :                     
+     558/    1000 :                     
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-1_KRT.asm - Page 11 - 12/20/2024 7:44:32
+
+
+  Symbol Table (* = unused):
+  --------------------------
+
+*ARCHITECTURE :                                        "i386-unknown-win32" - |
+ BACKW :                        3BB C |  BASE :                         300 - |
+ BUFFER1 :                      500 C |  BUFFER2 :                      600 C |
+ BUFFER2_END :                 1000 C | *CASESENSITIVE :                  0 - |
+ CLS :                          40A C |  CLS1 :                         40E C |
+*CONSTPI :        3.141592653589793 - | *DATE :                "12/20/2024" - |
+ DONTPLOT :                     3AF C |  D_LOOP :                       330 C |
+*END :                          486 C | *FALSE :                          0 - |
+ FB1 :                          47D C |  FORW :                         3C6 C |
+*FULLPMMU :                       1 - |  GETVRAMADR :                   437 C |
+ GOFF :                         406 C | *GON :                          401 C |
+ GR_CTRL :                      0B8 - | *HAS64 :                          0 - |
+*HASFPU :                         0 - | *HASPMMU :                        0 - |
+ INITGLEEST :                   477 C | *INSUPMODE :                      0 - |
+ LAST_GR_CTRL :                 400 C | *LISTON :                         1 - |
+ LOOP :                         32D C |  LOOP_IX :                      31A C |
+*MACEXP :                         7 - | *MOMCPU :                        80 - |
+*MOMCPUNAME :                 "Z80" - | *NESTMAX :                      100 - |
+ NOKEY :                        32A C | *PADDING :                        1 - |
+*PALETTE :                      3F2 C | *PLOT :                         376 C |
+ PROC :                         341 C |  RANDOM :                       3B8 C |
+*RELAXED :                        0 - |  SKIP :                         340 C |
+ SKIP2 :                        38D C |  SKIP3 :                        3AF C |
+ SPRITE :                       400 C |  START :                        30C C |
+*TIME :                   "7:44:32" - | *TRUE :                           1 - |
+*VERSION :                     142F - |  X1 :                           381 C |
+ X2 :                           385 C |
+
+     52 symbols
+     24 unused symbols
+
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-1_KRT.asm - Page 12 - 12/20/2024 7:44:32
+
+
+  Defined Functions:
+  ------------------
+
+LO                                    | HI                                   
+
+ AS V1.42 Beta [Bld 240] - Source File gleest_KC85-1_KRT.asm - Page 13 - 12/20/2024 7:44:32
+
+
+  Code Pages:
+  ----------
+
+STANDARD (0 changed characters)
+
+1 code page
+
+0.02 seconds assembly time
+
+    558 lines source file
+      2 passes
+      0 errors
+      0 warnings
