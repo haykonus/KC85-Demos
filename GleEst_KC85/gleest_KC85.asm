@@ -138,7 +138,7 @@ start:
                         plot:
                                 ld      a,e
                                 rra
-                                ;cp      0ffh            ; Y max  
+                                ;cp      0C0h            ; Y max  
                                                          
                                 ;
                                 ; Pixel schreiben
