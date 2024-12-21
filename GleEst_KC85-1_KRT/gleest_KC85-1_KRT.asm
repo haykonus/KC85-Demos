@@ -47,8 +47,9 @@ start:
         noKey:  ld      hl, buffer2
         
                 loop:   
-                        ;ld     bc,10FFh        ; nur wenige Punkte (für Test)
-                        ld      bc,3F06h        ; BH = Abstand Punkte, BL = Anzahl Punkte 
+                        ld      bc,3F04h	; BH = 3F -> max. 64 Punkte / 256-Byte-Block
+                                                ; BL = 04 -> HL auf Anfang von nächstem 
+						;            256-Byte-Block setzen
                         
                         d_loop:
                                 ;
@@ -64,13 +65,9 @@ start:
                                 ld      a,(hl)          ;BWS-Block holen
                                 out     (GR_CTRL),a     ;BWS_Block setzen
                                 inc     hl
-                                           
-                                ld      a, d            
-                                cp      0FFh            ;DE = Dummy-Adr ?
-                                jr      z, skip         ;js
-                                
+                                                                      
                                 ld      a,(de)          ;BWS-Byte holen (t)     
-                                and     (hl)            ;mit BWS-Byte (t-1) kombinieren (Bits löschen)                                               
+                                and     (hl)            ;mit BWS-Byte (t-1) kombinieren (Bits löschen)                           
                                 ld      (de),a          ;BWS schreiben 
                         skip:            
                                 exx                     
@@ -162,11 +159,12 @@ start:
                                 ; out:  HL = VRAM, A = Bitpos (3-Bit binär)
                                         
                                 jr      nc,x1           ; innerhalb 0-191 ?
-                                call    getVRAMadr      ; ja
+                                call    c, getVRAMadr   ; ja
                                 jr      x2
-                        x1:     
-                                ld      h, 0FFh         ; nein -> HL = Dummy-Adr
-                                jr      skip2
+                        x1:                             
+                                ld      hl, dummy       ; nein -> HL = Dummy-BWS
+                                ld      a, 08h          ; Grafik ein (Dummy)
+                                ld      (LAST_GR_CTRL),a
                         x2:     
                                 ld      b,hi(sprite-1)          
                                 cpl
@@ -195,7 +193,7 @@ start:
                                 ld      (hl),e          ; BWS lo merken
                                 inc     hl                      
                                 inc     hl
-                                inc     hl              
+                                inc     hl              ; wegen BWS-Block       
                                 ld      a,b
                                 
                                 exx
@@ -253,30 +251,26 @@ start:
                                 ; P2-P0   = Hintergrundfarbe 
                                 ; I2-I0   = Vordergrundfarbe
                                 
-                        
                                 ld      a, h
-                                cp      a, 0FFh         ; HL = Dummy-Adr ?
-                                jr      z, skip3        ; Farbe nicht schreiben
-                                
+                                cp      hi(dummy)
+                                jr      z, dontplot     ; wenn Dummy-BWS, Farbe nicht schreiben
                                 sub     4               ; Farb-RAM-Adresse bilden -> E8XX
                                 ld      h, a
                                 ld      a, (bc)         ; Farb-Attribut aus Palette holen
-                                ld      (hl), a         ; in Farb-RAM schreiben
-                        skip3:
-                
-        
+                                ld      (hl), a         ; in Farb-RAM schreiben          
+
                         dontplot:
                                 pop     hl              
                                 
                                 exx
                                 
-                                inc     hl              
-
+                                inc     hl
+                                                                                                                                        
                         dec     b
                         jp      nz, d_loop      
                         ;djnz    d_loop
 
-                        add     hl,bc   
+                        add     hl,bc     
                         
                         exx                     
                         
@@ -306,7 +300,7 @@ start:
                         
                         exx                             
                         
-                        ld      a,hi(buffer2_end)-2
+                        ld      a,hi(buffer2_end)-1
                         cp      a,h
                         
                 jp      nc,loop
@@ -513,40 +507,48 @@ getVRAMadr:
         ret
 
 ;----------------------------------------------------------------------------
-; buffer2 wird mit 0FFh initialisiert, damit keine undefinierten 
-; Schreibvorgänge im RAM erfolgen können.
+; buffer2 wird mit Adresse von "dummy", 08h und 55h initialisiert, damit beim 
+; Laufen von GleEst keine undefinierten Schreibvorgänge im RAM erfolgen können.
 ;------------------------------------------------------------------------------
-
+        
 initGleEst:
 
-        ld      bc, buffer2_end - buffer2       ; füllen mit dummy's, damit
-                                                ; Schreiben auf FFFFh umgelenkt
-                                                ; und dann verhindert wird                      
-        ld      hl, buffer2                              
-fb1:    ld      (hl), 0FFh
+        ld      bc, (buffer2_end - buffer2)/4
+        ld      hl, buffer2
+        ld      de, dummy
+        
+fb1:    ld      (hl), e         ; Dummy-BWS hi
         inc     hl
+        ld      (hl), d         ; Dummy-BWS lo
+        inc     hl
+        ld      (hl), 08h       ; 08h = Grafik ein
+        inc     hl
+        ld      (hl), 55h       ; Dummy-Pixel
+        inc     hl
+        
         dec     bc
         ld      a, b
         or      c
-        jr      nz, fb1
-        ret
-        
+        jr      nz, fb1 
+        ret     
 end     
-
 
 ;------------------------------------------------------------------------------
 
         ; RAM für GleEst
         
+dummy:  db      55h 
+ 
         align   0100h
         
 buffer1:        
         ds      0100h
-buffer2:        
-        ds      0A00h   ; 900h + 100h (Abfangen von Schreibzugriffen)
+buffer2:        	; 12 x 256 Bytes
+        ds      0C00h   ; C00h
 buffer2_end:  
 
 
+        
         
 
         

@@ -19,7 +19,7 @@ set bin=C:\Users\Heiko\Nextcloud\Privat\as\bin
 
 del %file%.inc
 del %file%.p
-REM del %file%.lst
+del %file%.lst
 exit /B
 
 :end
