@@ -37,7 +37,6 @@ start:
         
         ; Start GleEst
 
-        ld      sp, stack
         ld      hl, 0001h       ; (stack) darf nicht 0 sein
         push    hl
         
@@ -56,11 +55,13 @@ start:
                 ;jp      c,0E000h        ; Reset
                 
                 ld      hl,buffer2
+		
                 loop:   
-                        ;ld     bc,10FFh        ; nur wenige Punkte (für Test)
-                        ld      bc,3F06h        ; BH = Abstand Punkte, BL = Anzahl Punkte 
-                        
-                        d_loop:
+                        ld      bc,3F03h        ; TIPP von FL aus Forum www.robotrontechnik.de
+						; BH = 3F -> max. 64 Punkte / 192-Byte-Block
+                                                ; BL = 03 -> HL auf Anfang von nächstem 
+						;            192-Byte-Block setzen
+                        d_loop:                
                                 ;
                                 ; Pixel löschen
                                 ;
@@ -628,33 +629,30 @@ setColor:
         
 ;----------------------------------------------------------------------------
 ; buffer2 wird mit Adresse von "dummy" und 55h initialisiert, damit beim 
-; Start von GleEst keine undefinierten Schreibvorgänge im RAM erfolgen können.
+; Laufen von GleEst keine undefinierten Schreibvorgänge im RAM erfolgen können.
 ;------------------------------------------------------------------------------
 
 initGleEst:
 
-        ld      bc, (buffer2_end+100h-buffer2)/3 ; noch um 100h weiter 
-                                                 ; füllen mit dummy's, damit
-                                                 ; Schreiben auf 0 verhindert
-                                                 ; wird
+        ld      bc, (buffer2_end - buffer2)/3
         ld      hl, buffer2                             
         ld      de, dummy
-fb1:    ld      (hl), e
+	
+fb1:    ld      (hl), e		; Dummy-BWS hi
         inc     hl
-        ld      (hl), d
+        ld      (hl), d		; Dummy-BWS lo
         inc     hl
-        ld      (hl), 55h
+        ld      (hl), 55h	; Dummy-Pixel
         inc     hl
         
         dec     bc
         ld      a, b
         or      c
-        jr      nz, fb1
-        
+        jr      nz, fb1   
         ret
+end
 
 ;------------------------------------------------------------------------------
-end
                 
         ; RAM für GleEst
         
@@ -663,12 +661,10 @@ dummy:  db      55h
         align   100h     
 buffer1:        
         ds      100h
-buffer2:        
-        ds      0900h
-buffer2_end:            ; wird noch um 77h überschritten :-(
+buffer2:        	; 12 x 192 Bytes
+        ds      0900h	; 900h
+buffer2_end:         
   
-        ds      100h    ; zur Sicherheit
-stack:  
   
   
 
