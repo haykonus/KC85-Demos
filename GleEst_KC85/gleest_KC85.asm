@@ -289,10 +289,10 @@ start:
                         
                         exx                             
                         
-                        ld      a,hi(buffer2_end)-1     ; 0Dh
-                        cp      a,h                     ; 0Dh-0Eh -> CY, 
-                                                        ; buffer2_len = 0E00h-0500h = 0900h  
-                                                        ; 900h = C000h-B700h -> s. test Bit 6 im Original Code
+                        ld      a,hi(buffer2_end)-1     
+                        cp      a,h                     
+                                                        
+                                                        
                 jp      nc,loop
                 
         jp      loop_ix
