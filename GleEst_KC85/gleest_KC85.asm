@@ -2,7 +2,7 @@
 ; Titel:                GleEst für KC85/3+4
 ;
 ; Erstellt:             20.11.2024
-; Letzte Änderung:      09.12.2024
+; Letzte Änderung:      21.12.2024
 ;------------------------------------------------------------------------------ 
 
 hi      function x,(x>>8)&255
@@ -55,12 +55,12 @@ start:
                 ;jp      c,0E000h        ; Reset
                 
                 ld      hl,buffer2
-		
+                
                 loop:   
                         ld      bc,3F03h        ; TIPP von FL aus Forum www.robotrontechnik.de
-						; BH = 3F -> max. 64 Punkte / 192-Byte-Block
+                                                ; BH = 3F -> max. 64 Punkte / 192-Byte-Block
                                                 ; BL = 03 -> HL auf Anfang von nächstem 
-						;            192-Byte-Block setzen
+                                                ;            192-Byte-Block setzen
                         d_loop:                
                                 ;
                                 ; Pixel löschen
@@ -637,12 +637,12 @@ initGleEst:
         ld      bc, (buffer2_end - buffer2)/3
         ld      hl, buffer2                             
         ld      de, dummy
-	
-fb1:    ld      (hl), e		; Dummy-BWS hi
+        
+fb1:    ld      (hl), e         ; Dummy-BWS hi
         inc     hl
-        ld      (hl), d		; Dummy-BWS lo
+        ld      (hl), d         ; Dummy-BWS lo
         inc     hl
-        ld      (hl), 55h	; Dummy-Pixel
+        ld      (hl), 55h       ; Dummy-Pixel
         inc     hl
         
         dec     bc
@@ -661,8 +661,8 @@ dummy:  db      55h
         align   100h     
 buffer1:        
         ds      100h
-buffer2:        	; 12 x 192 Bytes
-        ds      0900h	; 900h
+buffer2:                ; 12 x 192 Bytes
+        ds      0900h   ; 900h
 buffer2_end:         
   
   
