@@ -1,13 +1,14 @@
 [English version](https://github-com.translate.goog/haykonus/KC85-Demos?_x_tr_sl=de&_x_tr_tl=en&_x_tr_hl=de&_x_tr_pto=wapp)
 # INHALT
 
+[GleEst für KC85/1/3/4](https://github.com/haykonus/KC85-Demos/edit/main/README.md#gleest-f%C3%BCr-kc85134)
+- [GleEst für KC85/1 KRT](https://github.com/haykonus/KC85-Demos/blob/main/README.md#gleest-f%C3%BCr-kc851)
 
-[GleEst für KC85/1 KRT](https://github.com/haykonus/KC85-Demos/blob/main/README.md#gleest-f%C3%BCr-kc851)
+- [GleEst für KC85/3](https://github.com/haykonus/KC85-Demos/blob/main/README.md#gleest-f%C3%BCr-kc853)
 
-[GleEst für KC85/3](https://github.com/haykonus/KC85-Demos/blob/main/README.md#gleest-f%C3%BCr-kc853)
+- [GleEst für KC85/4](https://github.com/haykonus/KC85-Demos/blob/main/README.md#gleest-f%C3%BCr-kc854)
 
-[GleEst für KC85/4](https://github.com/haykonus/KC85-Demos/blob/main/README.md#gleest-f%C3%BCr-kc854)
-
+<br>
 
 # GleEst für KC85/1/3/4
 
