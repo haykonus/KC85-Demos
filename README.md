@@ -12,9 +12,7 @@
 
 # GleEst für KC85/1/3/4
 
-Dieses Programm für den [KC85/1](https://www.robotrontechnik.de/index.htm?/html/computer/kc_dresden.htm) mit [KRT-Grafik](https://hc-ddr.hucki.net/wiki/doku.php/z9001/erweiterungen/krtgrafik) und [KC85/3](http://www.mpm-kc85.de/html/d001_kc85_3.htm) / [KC85/4](http://www.mpm-kc85.de/html/D001BasisDevise.htm) basiert auf [GleEst](https://zxart.ee/eng/software/demoscene/intro/256b-intro/gleest/) für den ZX-Spectrum 128, programmiert von Oleg Senin (bfox, St.Petersburg, Russia). Seine 256 Byte-Demo enthält im Original noch eine Sound-Ausgabe über den AY-3-8912 und setzt die Farb-Attribute des ZX-Spectrum. Der Algorithmus wurde extrahiert, leicht modifiziert (RAM-Speicherbedarf optimiert) und der Grafik-Effekt, inkl. Farben, an den KC85/1/3/4 angepasst. Das Programm läuft im [JKCEMU](http://www.jens-mueller.org/jkcemu/index.html) auch auf dem Z9001/KC87 mit [KRT-Grafik](https://hc-ddr.hucki.net/wiki/doku.php/z9001/erweiterungen/krtgrafik) sowie dem HC900, dem KC85/2 und dem KC85/5.
-
-Der Sound-Effekt ist nicht implementiert, da die KC85/1/3/4 keinen Sound-Chip der AY-3-Familie besitzen. Es gibt jedoch das Zusatz-Modul [M066](http://kc85.info/index.php/steckmodule-mxxx/256-m066-ein-soundmodul-fuer-den-kc85.html) ([Handbuch](http://kc85.info/index.php/download.html?view=download&id=362:m066-handbuch&catid=32)) für den KC85/3/4 mit dem AY-3-8910. In einer späteren Version könnte der Sound-Effekt dort noch implementiert werden. 
+Dieses Programm für den [KC85/1](https://www.robotrontechnik.de/index.htm?/html/computer/kc_dresden.htm) mit [KRT-Grafik](https://hc-ddr.hucki.net/wiki/doku.php/z9001/erweiterungen/krtgrafik) und [KC85/3](http://www.mpm-kc85.de/html/d001_kc85_3.htm) / [KC85/4](http://www.mpm-kc85.de/html/D001BasisDevise.htm) basiert auf [GleEst](https://zxart.ee/eng/software/demoscene/intro/256b-intro/gleest/) für den ZX-Spectrum 128, programmiert von Oleg Senin (bfox, St.Petersburg, Russia). Seine 256 Byte-Demo enthält im Original noch eine Sound-Ausgabe über den AY-3-8912 und setzt die Farb-Attribute des ZX-Spectrum. Der Algorithmus wurde extrahiert, leicht modifiziert (RAM-Speicherbedarf optimiert) und der Grafik-Effekt, inkl. Farben, an den KC85/1/3/4 angepasst. Das Programm läuft im [JKCEMU](http://www.jens-mueller.org/jkcemu/index.html) auch auf dem Z9001/KC87 mit [KRT-Grafik](https://hc-ddr.hucki.net/wiki/doku.php/z9001/erweiterungen/krtgrafik) sowie dem HC900, dem KC85/2 und dem KC85/5. Der Sound-Effekt ist implementiert für den KC85/3/4. Vorausetzung dafür ist das Zusatz-Modul [M066](http://kc85.info/index.php/steckmodule-mxxx/256-m066-ein-soundmodul-fuer-den-kc85.html) ([Handbuch](http://kc85.info/index.php/download.html?view=download&id=362:m066-handbuch&catid=32)) mit dem AY-3-8910.
 
 Zum Assemblieren wurde der [Arnold-Assembler](http://john.ccac.rwth-aachen.de:8000/as/) unter Windows 11 verwendet.
 
@@ -40,8 +38,10 @@ Zum Assemblieren wurde der [Arnold-Assembler](http://john.ccac.rwth-aachen.de:80
 - [gleest_KC85-1_KRT_0300H.bin](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-1_KRT/gleest_KC85-1_KRT_0300H.bin)
 - [gleest_KC85-1_KRT_0300H.kcc](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-1_KRT/gleest_KC85-1_KRT_0300H.kcc)
 
-Auf Adresse 0300H laden und mit GLEEST1 starten, oder Autostart.
-
+Auf Adresse 0300H laden und mit GLEEST1 starten oder Autostart.
+```
+GLEEST1
+```
 <br>
 
 ## GleEst für KC85/4
@@ -52,7 +52,8 @@ Auf Adresse 0300H laden und mit GLEEST1 starten, oder Autostart.
 
 - KC85/4 oder KC85/5
 - oder [JKCEMU](http://www.jens-mueller.org/jkcemu/index.html)
-
+- für den Sound-Effekt das Modul M066
+  
 ### Schnellstart
 
 > [!CAUTION]
@@ -62,7 +63,10 @@ Auf Adresse 0300H laden und mit GLEEST1 starten, oder Autostart.
 - [gleest_KC85-4_0200H.kcc](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-4/gleest_KC85-4_0200H.kcc)
 - [gleest_KC85-4_0200H.wav](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-4/gleest_KC85-4_0200H.wav)
 
-Auf Adresse 0200H laden, mit MENU / GLEEST4 starten, oder Autostart.
+Auf Adresse 0200H laden, mit MENU / GLEEST4 starten oder Autostart. Parameter "1" aktiviert den Sound-Effekt.
+```
+GLEEST4 [1]
+```
 
 ### GleEst als Bildschirmschoner
 
@@ -80,6 +84,7 @@ https://gitlab.com/stefan_koch/gleest-screensaver/
 
 - KC85/3, KC85/2 oder HC900
 - oder [JKCEMU](http://www.jens-mueller.org/jkcemu/index.html)
+- für den Sound-Effekt das Modul M066
 
 ### Schnellstart
 
@@ -90,8 +95,10 @@ https://gitlab.com/stefan_koch/gleest-screensaver/
 - [gleest_KC85-3_0200H.kcc](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-3/gleest_KC85-3_0200H.kcc)
 - [gleest_KC85-3_0200H.wav](https://github.com/haykonus/KC85-Demos/blob/main/GleEst_KC85-3/gleest_KC85-3_0200H.wav)
 
-Auf Adresse 0200H laden, mit MENU / GLEEST3 starten, oder Autostart.
-
+Auf Adresse 0200H laden, mit MENU / GLEEST3 starten oder Autostart. Parameter "1" aktiviert den Sound-Effekt.
+```
+GLEEST4 [1]
+```
 <br>
 
 ## Quellen
