@@ -97,7 +97,7 @@ https://gitlab.com/stefan_koch/gleest-screensaver/
 
 Auf Adresse 0200H laden, mit MENU / GLEEST3 starten oder Autostart. Parameter "1" aktiviert den Sound-Effekt.
 ```
-GLEEST4 [1]
+GLEEST3 [1]
 ```
 <br>
 
