@@ -2,11 +2,11 @@
 # INHALT
 
 [GleEst für KC85/1/3/4](https://github.com/haykonus/KC85-Demos?tab=readme-ov-file#gleest-f%C3%BCr-kc85134)
-- [GleEst für KC85/1 KRT](https://github.com/haykonus/KC85-Demos/blob/main/README.md#gleest-f%C3%BCr-kc851)
+- [GleEst für KC85/1 KRT](https://github.com/haykonus/KC85-Demos/tree/main?tab=readme-ov-file#gleest-f%C3%BCr-kc851)
 
-- [GleEst für KC85/3](https://github.com/haykonus/KC85-Demos/blob/main/README.md#gleest-f%C3%BCr-kc853)
+- [GleEst für KC85/3](https://github.com/haykonus/KC85-Demos?tab=readme-ov-file#gleest-f%C3%BCr-kc853)
 
-- [GleEst für KC85/4](https://github.com/haykonus/KC85-Demos/blob/main/README.md#gleest-f%C3%BCr-kc854)
+- [GleEst für KC85/4](https://github.com/haykonus/KC85-Demos?tab=readme-ov-file#gleest-f%C3%BCr-kc854)
 
 <br>
 
