@@ -2,16 +2,28 @@
 ; Titel:                GleEst für KC85/3+4
 ;
 ; Erstellt:             20.11.2024
-; Letzte Änderung:      21.12.2024
+; Letzte Änderung:      03.01.2025
 ;------------------------------------------------------------------------------ 
 
 hi      function x,(x>>8)&255
 lo      function x, x&255  
 
         cpu     z80
+        
+; --- Systemzellen CAOS (thx to Crawler) --- 
 
-KC85_3  equ     3
-KC85_4  equ     4
+ARGN    EQU     0B781H  ; Anzahl der übergebenen Argumente steht hier und in Register A 
+ARG1    EQU     0B782H  ; 1. Argument
+
+; --- Tastatureingabe (thx to Crawler) ---
+
+IXO_RDY EQU     8       ; Tastencode steht zur Verfügung, Ton läuft, Shift Lock
+IXO_KEY EQU     13      ; Tastencode (ASCII)
+
+;------------------------------------------------------------------------------
+
+KC85_3  EQU     3
+KC85_4  EQU     4
         
         ifndef  KC_TYPE
                 KC_TYPE: set    KC85_4
@@ -28,8 +40,18 @@ KC85_4  equ     4
         elseif  KC_TYPE == KC85_4
         db      7Fh,7Fh, 'GLEEST4', 1
         endif
+     
+start:  xor     a
+        ld      (ix+IXO_RDY),a          ; Löschen Taste (für Autostart)
         
-start:  
+        ld      a,(ARGN)
+        and     a                       ; Argumente ?
+        jr      z,noSound               ; nein
+
+        ld      a,(ARG1)                ; ja
+        cp      1                       ; 1 = mit Sound
+        call    z,initSound        
+noSound:       
         call    cls
         call    initGleEst
         
@@ -47,13 +69,12 @@ start:
         loop_ix:
         
                 ; TIPP von Crawler
-                bit     0,(ix+8)         ; Tastenstatusabfrage
-                jp      nz, 0E000h       ; Reset
- 
-                ;call    0F003H          ; Programmverteiler PV1
-                ;db      0Ch             ; KBDS Tastenstatusabfrage 
-                ;jp      c,0E000h        ; Reset
-                
+                bit     0,(ix+IXO_RDY)   ; Tastenstatusabfrage
+                jr      z, noExit
+        exit:
+                call    deinitSound
+                jp      0E000h           ; Reset
+        noExit:        
                 ld      hl,buffer2
                 
                 loop:   
@@ -651,6 +672,157 @@ fb1:    ld      (hl), e         ; Dummy-BWS hi
         jr      nz, fb1   
         ret
 end
+
+;------------------------------------------------------------------------------
+; Sound -> (c) KaiOr, Forum www.robotrontechnik.de
+;------------------------------------------------------------------------------
+
+inttab  equ     01c8h           ; Interrupttabelle USER-Bereich
+
+m066sr  equ     38h             ; Auswahl und Lesen AY Register
+m066wr  equ     39h             ; Schreiben AY Register
+m066ct  equ     3ch             ; CTC Basisadresse
+
+; M066 finden
+mfind:  ld      bc, 0880h       ; Beginn Schacht 08
+        ld      e, 0dch         ; Kennbyte M066
+mloop:  in      a, (c)          ; Strukturbyte abfragen
+        cp      e               ; passt?
+        jr      z, mgef
+        ld      a, b
+        add     a, 4
+        ld      b, a
+        cp      0f8h            ; Endstation
+        jr      nz, mloop
+        ret                     ; Abbruch
+mgef    scf
+        ret
+
+initSound:
+        call    mfind
+        ret     nc
+
+        ld      a, 03h
+        out     (m066ct), a     ; RESET CTC Kanal 0
+        ld      a, lo(inttab)
+        out     (m066ct), a     ; INT-Vektor uebergeben
+        ld      hl, isr
+        ld      (inttab), hl    ; ISR eintragen
+        ; INT an, Timer, VT=256, stg.Flanke, o.Trigger, Konst. folgt
+        ld      a, 0b5h
+        out     (m066ct), a
+        ld      a, 8ah          ; 1,76Mhz/256/138 = ~50Hz
+        out     (m066ct), a
+        ; reset self-modifying code
+        ld      a, 14
+        ld      (poiu+1), a
+        xor     a
+        ld      (intcnt+1), a
+        ret
+
+deinitSound:
+        call    mfind
+        ret     nc
+
+        ld      a, 03h
+        out     (m066ct), a     ; RESET CTC-Kanal 0
+        ld      a, 7            ; AY Register 7 - Mixer
+        out     (m066sr), a
+        ld      a,(m066sr)
+        or      3Fh             ; Ton/Geraeusche aus (Kanal A-C)
+        out     (m066wr),a
+        xor     a
+        ld      b,10
+        ld      c,m066sr
+deloop  out     (c), b          ; AY Register 10,9,8 - Volume
+        out     (m066wr),a
+        dec     b
+        bit     3,b             ; 7?
+        jr      nz,deloop
+        or      1               ; loesche Zero-Flag
+        ret
+
+;------------------------------------------------------------------------------
+; Interrupt-Routine -> (c) KaiOr, Forum www.robotrontechnik.de
+;------------------------------------------------------------------------------
+
+ntecnt  db      0               ; Zaehler Notenwechsel
+
+isr:
+;       di                      ; macht CPU autom.
+        push    af
+        push    bc
+        push    hl
+
+intcnt: ld      a, 0            ; Zaehler Interrupt
+        inc     a
+        and     00111111b       ; max. 64 Schaltzustaende
+        ld      (intcnt+1), a
+        ld      hl, ntecnt
+
+        jr      nz, next
+
+        inc     (hl)            ; erhoeht sich jede 1/50Hz * 64 = 1,28s
+next:
+        and     3               ; max. 4 Schaltzustaende
+        ld      b, a
+        ld      a, (hl)         
+        and     00000100b       ; ggf. Offset (orn + 4) nach 4x1,28s
+        add     a, lo(orn)
+
+        ld      l, a
+        ld      h, hi(orn)
+        ld      a, (hl)
+        rrca
+        ld      (frq), a        ; lade Grundton
+
+        ld      a, l
+        add     a, b            ; Offset (orn + 0...3)
+        ld      l, a
+
+        ld      l, (hl)
+        ld      h, 80h
+        add     hl, hl
+        ld      (mask-7), hl    ; ORN_FRQ FOR CHAN A
+        add     hl, hl
+        ld      (mask-3), hl    ; ORN_FRQ FOR CHAN C
+
+        ld      hl, mask-7
+        ld      c, m066wr
+        xor     a
+out_ay_1:
+        out     (m066sr), a
+        outi
+        inc     a
+poiu:   cp      14
+        jr      nz, out_ay_1
+
+        ld      a, 13
+        ld      (poiu+1), a
+
+        pop     hl
+        pop     bc
+        pop     af
+        ei
+        reti
+
+; AY-3-8912 Datenbereich
+        db      0,0,0,0,0,0,0   ; mask-7, mask-3
+mask    db      7ah             ; mask
+vol_a   db      46h             ; vol a
+vol_b   db      97h             ; vol b
+vol_c   db      04h             ; vol c +
+frq     db      00h,00h         ; env frq
+form    db      4ah             ; env form
+
+        align   10h
+
+orn
+;       db      5eh, 7eh, 4fh, 3eh
+;       db      76h, 5dh, 4fh, 3bh
+
+        db      6ah, 8eh, 59h, 47h
+        db      86h, 6bh, 59h, 42h
 
 ;------------------------------------------------------------------------------
                 
